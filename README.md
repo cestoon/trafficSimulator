@@ -13,6 +13,8 @@ A traffic simulator implemented in Python using pygame.
 To learn more about how the project was created check out this [article](https://towardsdatascience.com/simulating-traffic-flow-in-python-ee1eab4dd20f).
 on Medium.
 
+[translated version](http://www.bimant.com/blog/traffic-simulation-in-python/)
+
 ## Getting Started
 
 ### Prerequisites
