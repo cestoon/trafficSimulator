@@ -286,7 +286,10 @@ class Window:
     def draw_signals(self):
         for signal in self.sim.traffic_signals:
             for i in range(len(signal.roads)):
-                color = (0, 255, 0) if signal.current_cycle[i] else (255, 0, 0)
+                if self.sim.hide_signal is True:
+                    color = (180, 180, 220)
+                else:
+                    color = (0, 255, 0) if signal.current_cycle[i] else (255, 0, 0)
                 for road in signal.roads[i]:
                     a = 0
                     position = (
@@ -297,7 +300,7 @@ class Window:
                         position,
                         (1, 3),
                         cos=road.angle_cos, sin=road.angle_sin,
-                        color=color)
+                        color=color, filled=not self.sim.hide_signal)
 
     def draw_status(self):
         text_fps = self.text_font.render(f't={self.sim.t:.5}', False, (0, 0, 0))

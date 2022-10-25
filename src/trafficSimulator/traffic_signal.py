@@ -15,9 +15,8 @@ class TrafficSignal:
         self.slow_distance = 50
         self.slow_factor = 0.4
         self.stop_distance = 15
-
+        self.hide_signal = False
         self.current_cycle_index = 0
-
         self.last_t = 0
 
     def init_properties(self):
