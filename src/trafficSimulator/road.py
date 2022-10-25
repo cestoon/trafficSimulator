@@ -53,7 +53,7 @@ class Road:
                 if self.vehicles[0].x >= self.length - self.traffic_signal.slow_distance:
                     # Slow vehicles in slowing zone
                     self.vehicles[0].slow(self.traffic_signal.slow_factor * self.vehicles[0]._v_max)
-                if self.vehicles[0].x >= self.length - self.traffic_signal.stop_distance and \
+                if self.length - self.traffic_signal.stop_distance <= \
                         self.vehicles[0].x <= self.length - self.traffic_signal.stop_distance / 2:
                     # Stop vehicles in the stop zone
                     self.vehicles[0].stop()

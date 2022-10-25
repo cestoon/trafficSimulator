@@ -20,6 +20,7 @@ class Simulation:
         self.roads = []  # Array to store roads
         self.generators = []
         self.traffic_signals = []
+        self.hide_signal = False
 
     def create_road(self, start, end):
         road = Road(start, end)
@@ -39,6 +40,7 @@ class Simulation:
         roads = [[self.roads[i] for i in road_group] for road_group in roads]
         sig = TrafficSignal(roads, config)
         self.traffic_signals.append(sig)
+        self.hide_signal = sig.hide_signal
         return sig
 
     def update(self):
