@@ -1,11 +1,46 @@
-import pygame
-from pygame import gfxdraw
 import numpy as np
+import pygame
+from src.trafficSimulator.button import traffic_flow_button, vehicle_velocity_button, scene_light_2lane_button, scence_light_4lane_button, scence_smart_4lane_button,scence_smart_2lane_button
+from src.trafficSimulator import Simulation, TURN_LEFT, TURN_RIGHT, turn_road
+from pygame import gfxdraw
+import os
 
 
 class Window:
     def __init__(self, sim, config={}):
+        # create buttons
+
+        # load button images
+        # get the directory of this file
+        sourceFileDir = os.path.dirname(os.path.abspath(__file__))
+        # join the filepath and the filename
+        start_btn_path = os.path.join(sourceFileDir, './button/start_btn.png')
+        exit_btn_path = os.path.join(sourceFileDir, './button/exit_btn.png')
+        plus_btn_path = os.path.join(sourceFileDir, './button/plus_btn.png')
+        minus_btn_path = os.path.join(sourceFileDir, './button/minus_btn.png')
+        light_2lane_btn_path = os.path.join(sourceFileDir, 'button/traffic2lanes.jpg')
+        light_4lane_btn_path = os.path.join(sourceFileDir, 'button/traffic4lanes.jpg')
+        smart_2lane_btn_path = os.path.join(sourceFileDir, 'button/smart2lanes.jpg')
+        smart_4lane_btn_path = os.path.join(sourceFileDir, 'button/smart4lanes.jpg')
+
+        self.plus_img = pygame.image.load(plus_btn_path)
+        self.minus_img = pygame.image.load(minus_btn_path)
+        self.light_2lane_img = pygame.image.load(light_2lane_btn_path)
+        self.light_4lane_img = pygame.image.load(light_4lane_btn_path)
+        self.smart_2lane_img = pygame.image.load(smart_2lane_btn_path)
+        self.smart_4lane_img = pygame.image.load(smart_4lane_btn_path)
+
+        # create button instances
+        self.traffic_flow_button = traffic_flow_button.Button(0, 20, self.plus_img, self.minus_img, 0.01, 0.01)
+        self.vehicle_velocity_button = vehicle_velocity_button.Button(0, 40, self.plus_img, self.minus_img, 0.01, 0.01)
+        self.light_2lane_button = scene_light_2lane_button.Button(100, 60, self.light_2lane_img, 0.4)
+        self.smart_2lane_button = scence_smart_2lane_button.Button(100, 110, self.smart_2lane_img, 0.4)
+        self.light_4lane_button = scence_light_4lane_button.Button(100, 160, self.light_4lane_img, 0.4)
+        self.smart_4lane_button = scence_smart_4lane_button.Button(100, 210, self.smart_4lane_img, 0.4)
         # Simulation to draw
+
+        # Simulation to draw
+
         self.sim = sim
 
         # Set default configurations
@@ -73,7 +108,7 @@ class Window:
                         # Mouse wheel up
                         self.zoom *= (self.zoom ** 2 + self.zoom / 4 + 1) / (self.zoom ** 2 + 1)
                     if event.button == 5:
-                        # Mouse wheel down 
+                        # Mouse wheel down
                         self.zoom *= (self.zoom ** 2 + 1) / (self.zoom ** 2 + self.zoom / 4 + 1)
                 elif event.type == pygame.MOUSEMOTION:
                     # Drag content
@@ -286,10 +321,7 @@ class Window:
     def draw_signals(self):
         for signal in self.sim.traffic_signals:
             for i in range(len(signal.roads)):
-                if self.sim.hide_signal is True:
-                    color = (180, 180, 220)
-                else:
-                    color = (0, 255, 0) if signal.current_cycle[i] else (255, 0, 0)
+                color = (0, 255, 0) if signal.current_cycle[i] else (255, 0, 0)
                 for road in signal.roads[i]:
                     a = 0
                     position = (
@@ -300,7 +332,7 @@ class Window:
                         position,
                         (1, 3),
                         cos=road.angle_cos, sin=road.angle_sin,
-                        color=color, filled=not self.sim.hide_signal)
+                        color=color)
 
     def draw_status(self):
         text_fps = self.text_font.render(f't={self.sim.t:.5}', False, (0, 0, 0))
@@ -308,6 +340,596 @@ class Window:
 
         self.screen.blit(text_fps, (0, 0))
         self.screen.blit(text_frc, (100, 0))
+
+    def draw_traffic_flow_button(self):
+        # to draw buttons
+        if self.traffic_flow_button.draw(self.screen, self.sim.generators[0], self.text_font):
+            print('flow')
+
+    def draw_vehicle_velocity_button(self):
+        # to draw buttons
+        if self.vehicle_velocity_button.draw(self.screen, self.sim.generators[0], self.text_font):
+            print('velocity')
+
+    def draw_light_2lane_button(self):
+        # to draw buttons
+        if self.light_2lane_button.draw(self.screen, self.sim, self.text_font):
+            print('light2lane')
+            self.sim = Simulation()
+
+            # Play with these
+            n = 15
+            a = 2
+            b = 12
+            l = 300
+
+            # Nodes
+            WEST_RIGHT_START = (-b - l, a)
+            WEST_LEFT_START = (-b - l, -a)
+
+            SOUTH_RIGHT_START = (a, b + l)
+            SOUTH_LEFT_START = (-a, b + l)
+
+            EAST_RIGHT_START = (b + l, -a)
+            EAST_LEFT_START = (b + l, a)
+
+            NORTH_RIGHT_START = (-a, -b - l)
+            NORTH_LEFT_START = (a, -b - l)
+
+            WEST_RIGHT = (-b, a)
+            WEST_LEFT = (-b, -a)
+
+            SOUTH_RIGHT = (a, b)
+            SOUTH_LEFT = (-a, b)
+
+            EAST_RIGHT = (b, -a)
+            EAST_LEFT = (b, a)
+
+            NORTH_RIGHT = (-a, -b)
+            NORTH_LEFT = (a, -b)
+
+            # Roads
+            WEST_INBOUND = (WEST_RIGHT_START, WEST_RIGHT)
+            SOUTH_INBOUND = (SOUTH_RIGHT_START, SOUTH_RIGHT)
+            EAST_INBOUND = (EAST_RIGHT_START, EAST_RIGHT)
+            NORTH_INBOUND = (NORTH_RIGHT_START, NORTH_RIGHT)
+
+            WEST_OUTBOUND = (WEST_LEFT, WEST_LEFT_START)
+            SOUTH_OUTBOUND = (SOUTH_LEFT, SOUTH_LEFT_START)
+            EAST_OUTBOUND = (EAST_LEFT, EAST_LEFT_START)
+            NORTH_OUTBOUND = (NORTH_LEFT, NORTH_LEFT_START)
+
+            WEST_STRAIGHT = (WEST_RIGHT, EAST_LEFT)
+            SOUTH_STRAIGHT = (SOUTH_RIGHT, NORTH_LEFT)
+            EAST_STRAIGHT = (EAST_RIGHT, WEST_LEFT)
+            NORTH_STRAIGHT = (NORTH_RIGHT, SOUTH_LEFT)
+
+            WEST_RIGHT_TURN = turn_road(WEST_RIGHT, SOUTH_LEFT, TURN_RIGHT, n)
+            WEST_LEFT_TURN = turn_road(WEST_RIGHT, NORTH_LEFT, TURN_LEFT, n)
+
+            SOUTH_RIGHT_TURN = turn_road(SOUTH_RIGHT, EAST_LEFT, TURN_RIGHT, n)
+            SOUTH_LEFT_TURN = turn_road(SOUTH_RIGHT, WEST_LEFT, TURN_LEFT, n)
+
+            EAST_RIGHT_TURN = turn_road(EAST_RIGHT, NORTH_LEFT, TURN_RIGHT, n)
+            EAST_LEFT_TURN = turn_road(EAST_RIGHT, SOUTH_LEFT, TURN_LEFT, n)
+
+            NORTH_RIGHT_TURN = turn_road(NORTH_RIGHT, WEST_LEFT, TURN_RIGHT, n)
+            NORTH_LEFT_TURN = turn_road(NORTH_RIGHT, EAST_LEFT, TURN_LEFT, n)
+
+            self.sim.create_roads([
+                WEST_INBOUND,
+                SOUTH_INBOUND,
+                EAST_INBOUND,
+                NORTH_INBOUND,
+
+                WEST_OUTBOUND,
+                SOUTH_OUTBOUND,
+                EAST_OUTBOUND,
+                NORTH_OUTBOUND,
+
+                WEST_STRAIGHT,
+                SOUTH_STRAIGHT,
+                EAST_STRAIGHT,
+                NORTH_STRAIGHT,
+
+                *WEST_RIGHT_TURN,
+                *WEST_LEFT_TURN,
+
+                *SOUTH_RIGHT_TURN,
+                *SOUTH_LEFT_TURN,
+
+                *EAST_RIGHT_TURN,
+                *EAST_LEFT_TURN,
+
+                *NORTH_RIGHT_TURN,
+                *NORTH_LEFT_TURN
+            ])
+
+            def road(a): return range(a, a + n)
+
+            self.sim.create_gen({
+                'vehicle_rate': 30,
+                'vehicles': [
+                    [3, {'path': [0, 8, 6]}],
+                    [1, {'path': [0, *road(12), 5]}],
+                    [1, {'path': [0, *road(12 + n), 7]}],
+
+                    [3, {'path': [1, 9, 7]}],
+                    [1, {'path': [1, *road(12 + 2 * n), 6]}],
+                    [1, {'path': [1, *road(12 + 3 * n), 4]}],
+
+                    [3, {'path': [2, 10, 4]}],
+                    [1, {'path': [2, *road(12 + 4 * n), 7]}],
+                    [1, {'path': [2, *road(12 + 5 * n), 5]}],
+
+                    [3, {'path': [3, 11, 5]}],
+                    [1, {'path': [3, *road(12 + 6 * n), 4]}],
+                    [1, {'path': [3, *road(12 + 7 * n), 6]}]
+                ]})
+
+            self.sim.create_signal([[0, 2], [1, 3]])
+
+    def draw_smart_2lane_button(self):
+        if self.smart_2lane_button.draw(self.screen, self.sim, self.text_font):
+            print('smart2lane')
+            self.sim = Simulation()
+
+            # Play with these
+            n = 15
+            a = 2
+            b = 12
+            l = 300
+
+            # Nodes
+            WEST_RIGHT_START = (-b - l, a)
+            WEST_LEFT_START = (-b - l, -a)
+
+            SOUTH_RIGHT_START = (a, b + l)
+            SOUTH_LEFT_START = (-a, b + l)
+
+            EAST_RIGHT_START = (b + l, -a)
+            EAST_LEFT_START = (b + l, a)
+
+            NORTH_RIGHT_START = (-a, -b - l)
+            NORTH_LEFT_START = (a, -b - l)
+
+            WEST_RIGHT = (-b, a)
+            WEST_LEFT = (-b, -a)
+
+            SOUTH_RIGHT = (a, b)
+            SOUTH_LEFT = (-a, b)
+
+            EAST_RIGHT = (b, -a)
+            EAST_LEFT = (b, a)
+
+            NORTH_RIGHT = (-a, -b)
+            NORTH_LEFT = (a, -b)
+
+            # Roads
+            WEST_INBOUND = (WEST_RIGHT_START, WEST_RIGHT)
+            SOUTH_INBOUND = (SOUTH_RIGHT_START, SOUTH_RIGHT)
+            EAST_INBOUND = (EAST_RIGHT_START, EAST_RIGHT)
+            NORTH_INBOUND = (NORTH_RIGHT_START, NORTH_RIGHT)
+
+            WEST_OUTBOUND = (WEST_LEFT, WEST_LEFT_START)
+            SOUTH_OUTBOUND = (SOUTH_LEFT, SOUTH_LEFT_START)
+            EAST_OUTBOUND = (EAST_LEFT, EAST_LEFT_START)
+            NORTH_OUTBOUND = (NORTH_LEFT, NORTH_LEFT_START)
+
+            WEST_STRAIGHT = (WEST_RIGHT, EAST_LEFT)
+            SOUTH_STRAIGHT = (SOUTH_RIGHT, NORTH_LEFT)
+            EAST_STRAIGHT = (EAST_RIGHT, WEST_LEFT)
+            NORTH_STRAIGHT = (NORTH_RIGHT, SOUTH_LEFT)
+
+            WEST_RIGHT_TURN = turn_road(WEST_RIGHT, SOUTH_LEFT, TURN_RIGHT, n)
+            WEST_LEFT_TURN = turn_road(WEST_RIGHT, NORTH_LEFT, TURN_LEFT, n)
+
+            SOUTH_RIGHT_TURN = turn_road(SOUTH_RIGHT, EAST_LEFT, TURN_RIGHT, n)
+            SOUTH_LEFT_TURN = turn_road(SOUTH_RIGHT, WEST_LEFT, TURN_LEFT, n)
+
+            EAST_RIGHT_TURN = turn_road(EAST_RIGHT, NORTH_LEFT, TURN_RIGHT, n)
+            EAST_LEFT_TURN = turn_road(EAST_RIGHT, SOUTH_LEFT, TURN_LEFT, n)
+
+            NORTH_RIGHT_TURN = turn_road(NORTH_RIGHT, WEST_LEFT, TURN_RIGHT, n)
+            NORTH_LEFT_TURN = turn_road(NORTH_RIGHT, EAST_LEFT, TURN_LEFT, n)
+
+            self.sim.create_roads([
+                WEST_INBOUND,
+                SOUTH_INBOUND,
+                EAST_INBOUND,
+                NORTH_INBOUND,
+
+                WEST_OUTBOUND,
+                SOUTH_OUTBOUND,
+                EAST_OUTBOUND,
+                NORTH_OUTBOUND,
+
+                WEST_STRAIGHT,
+                SOUTH_STRAIGHT,
+                EAST_STRAIGHT,
+                NORTH_STRAIGHT,
+
+                *WEST_RIGHT_TURN,
+                *WEST_LEFT_TURN,
+
+                *SOUTH_RIGHT_TURN,
+                *SOUTH_LEFT_TURN,
+
+                *EAST_RIGHT_TURN,
+                *EAST_LEFT_TURN,
+
+                *NORTH_RIGHT_TURN,
+                *NORTH_LEFT_TURN
+            ])
+
+            def road(a): return range(a, a + n)
+
+            self.sim.create_gen({
+                'vehicle_rate': 30,
+                'vehicles': [
+                    [3, {'path': [0, 8, 6]}],
+                    [1, {'path': [0, *road(12), 5]}],
+                    [1, {'path': [0, *road(12 + n), 7]}],
+
+                    [3, {'path': [1, 9, 7]}],
+                    [1, {'path': [1, *road(12 + 2 * n), 6]}],
+                    [1, {'path': [1, *road(12 + 3 * n), 4]}],
+
+                    [3, {'path': [2, 10, 4]}],
+                    [1, {'path': [2, *road(12 + 4 * n), 7]}],
+                    [1, {'path': [2, *road(12 + 5 * n), 5]}],
+
+                    [3, {'path': [3, 11, 5]}],
+                    [1, {'path': [3, *road(12 + 6 * n), 4]}],
+                    [1, {'path': [3, *road(12 + 7 * n), 6]}]
+                ]})
+
+    def draw_smart_4lane_button(self):
+        if self.smart_4lane_button.draw(self.screen, self.sim, self.text_font):
+            print('smart4lane')
+            self.sim = Simulation()
+
+            # Play with these
+            n = 15
+            a = 2
+            b = 12
+            l = 300
+
+            # Nodes
+            WEST_RIGHT_START = (-b - l, a)
+            WEST_LEFT_START = (-b - l, -a)
+
+            SOUTH_RIGHT_START = (a, b + l)
+            SOUTH_LEFT_START = (-a, b + l)
+
+            EAST_RIGHT_START = (b + l, -a)
+            EAST_LEFT_START = (b + l, a)
+
+            NORTH_RIGHT_START = (-a, -b - l)
+            NORTH_LEFT_START = (a, -b - l)
+
+            WEST_RIGHT = (-b, a)
+            WEST_LEFT = (-b, -a)
+
+            SOUTH_RIGHT = (a, b)
+            SOUTH_LEFT = (-a, b)
+
+            EAST_RIGHT = (b, -a)
+            EAST_LEFT = (b, a)
+
+            NORTH_RIGHT = (-a, -b)
+            NORTH_LEFT = (a, -b)
+
+            WEST_RIGHT_START_1 = (-b - l, 3 * a)
+            WEST_LEFT_START_1 = (-b - l, -3 * a)
+            SOUTH_RIGHT_START_1 = (3 * a, b + l)
+            SOUTH_LEFT_START_1 = (-3 * a, b + l)
+            EAST_RIGHT_START_1 = (b + l, -3 * a)
+            EAST_LEFT_START_1 = (b + l, 3 * a)
+            NORTH_RIGHT_START_1 = (-3 * a, -b - l)
+            NORTH_LEFT_START_1 = (3 * a, -b - l)
+
+            WEST_RIGHT_1 = (-b, 3 * a)
+            WEST_LEFT_1 = (-b, -3 * a)
+            SOUTH_RIGHT_1 = (3 * a, b)
+            SOUTH_LEFT_1 = (-3 * a, b)
+            EAST_RIGHT_1 = (b, -3 * a)
+            EAST_LEFT_1 = (b, 3 * a)
+            NORTH_RIGHT_1 = (-3 * a, -b)
+            NORTH_LEFT_1 = (3 * a, -b)
+
+            # Roads
+            WEST_INBOUND = (WEST_RIGHT_START, WEST_RIGHT)
+            SOUTH_INBOUND = (SOUTH_RIGHT_START, SOUTH_RIGHT)
+            EAST_INBOUND = (EAST_RIGHT_START, EAST_RIGHT)
+            NORTH_INBOUND = (NORTH_RIGHT_START, NORTH_RIGHT)
+
+            WEST_OUTBOUND = (WEST_LEFT, WEST_LEFT_START)
+            SOUTH_OUTBOUND = (SOUTH_LEFT, SOUTH_LEFT_START)
+            EAST_OUTBOUND = (EAST_LEFT, EAST_LEFT_START)
+            NORTH_OUTBOUND = (NORTH_LEFT, NORTH_LEFT_START)
+
+            WEST_STRAIGHT = (WEST_RIGHT, EAST_LEFT)
+            SOUTH_STRAIGHT = (SOUTH_RIGHT, NORTH_LEFT)
+            EAST_STRAIGHT = (EAST_RIGHT, WEST_LEFT)
+            NORTH_STRAIGHT = (NORTH_RIGHT, SOUTH_LEFT)
+
+            WEST_STRAIGHT_1 = (WEST_RIGHT_1, EAST_LEFT_1)
+            SOUTH_STRAIGHT_1 = (SOUTH_RIGHT_1, NORTH_LEFT_1)
+            EAST_STRAIGHT_1 = (EAST_RIGHT_1, WEST_LEFT_1)
+            NORTH_STRAIGHT_1 = (NORTH_RIGHT_1, SOUTH_LEFT_1)
+
+            WEST_RIGHT_TURN = turn_road(WEST_RIGHT_1, SOUTH_LEFT_1, TURN_RIGHT, n)
+            WEST_LEFT_TURN = turn_road(WEST_RIGHT, NORTH_LEFT, TURN_LEFT, n)
+
+            SOUTH_RIGHT_TURN = turn_road(SOUTH_RIGHT_1, EAST_LEFT_1, TURN_RIGHT, n)
+            SOUTH_LEFT_TURN = turn_road(SOUTH_RIGHT, WEST_LEFT, TURN_LEFT, n)
+
+            EAST_RIGHT_TURN = turn_road(EAST_RIGHT_1, NORTH_LEFT_1, TURN_RIGHT, n)
+            EAST_LEFT_TURN = turn_road(EAST_RIGHT, SOUTH_LEFT, TURN_LEFT, n)
+
+            NORTH_RIGHT_TURN = turn_road(NORTH_RIGHT_1, WEST_LEFT_1, TURN_RIGHT, n)
+            NORTH_LEFT_TURN = turn_road(NORTH_RIGHT, EAST_LEFT, TURN_LEFT, n)
+
+            WEST_INBOUND_1 = (WEST_RIGHT_START_1, WEST_RIGHT_1)
+            SOUTH_INBOUND_1 = (SOUTH_RIGHT_START_1, SOUTH_RIGHT_1)
+            EAST_INBOUND_1 = (EAST_RIGHT_START_1, EAST_RIGHT_1)
+            NORTH_INBOUND_1 = (NORTH_RIGHT_START_1, NORTH_RIGHT_1)
+
+            WEST_OUTBOUND_1 = (WEST_LEFT_1, WEST_LEFT_START_1)
+            SOUTH_OUTBOUND_1 = (SOUTH_LEFT_1, SOUTH_LEFT_START_1)
+            EAST_OUTBOUND_1 = (EAST_LEFT_1, EAST_LEFT_START_1)
+            NORTH_OUTBOUND_1 = (NORTH_LEFT_1, NORTH_LEFT_START_1)
+
+            self.sim.create_roads([
+                WEST_INBOUND,  # 0
+                SOUTH_INBOUND,  # 1
+                EAST_INBOUND,  # 2
+                NORTH_INBOUND,  # 3
+
+                WEST_OUTBOUND,  # 4
+                SOUTH_OUTBOUND,  # 5
+                EAST_OUTBOUND,  # 6
+                NORTH_OUTBOUND,  # 7
+
+                WEST_STRAIGHT,  # 8
+                SOUTH_STRAIGHT,  # 9
+                EAST_STRAIGHT,  # 10
+                NORTH_STRAIGHT,  # 11
+
+                WEST_INBOUND_1,  # 12
+                SOUTH_INBOUND_1,  # 13
+                EAST_INBOUND_1,  # 14
+                NORTH_INBOUND_1,  # 15
+
+                WEST_OUTBOUND_1,  # 16
+                SOUTH_OUTBOUND_1,  # 17
+                EAST_OUTBOUND_1,  # 18
+                NORTH_OUTBOUND_1,  # 19
+
+                *WEST_RIGHT_TURN,  # 20
+                *WEST_LEFT_TURN,  # 20+1n
+
+                *SOUTH_RIGHT_TURN,  # 20+2n
+                *SOUTH_LEFT_TURN,  # 20+3n
+
+                *EAST_RIGHT_TURN,  # 20+4n
+                *EAST_LEFT_TURN,  # 20+5n
+
+                *NORTH_RIGHT_TURN,  # 20+6n
+                *NORTH_LEFT_TURN,  # 20+7n
+
+                WEST_STRAIGHT_1,
+                SOUTH_STRAIGHT_1,
+                EAST_STRAIGHT_1,
+                NORTH_STRAIGHT_1
+            ])
+
+            def road(a):
+                return range(a, a + n)
+
+            self.sim.create_gen({
+                'vehicle_rate': 10,
+                'vehicles': [
+                    # straight
+                    [3, {'path': [0, 8, 6]}],
+                    [3, {'path': [1, 9, 7]}],
+                    [3, {'path': [2, 10, 4]}],
+                    [3, {'path': [3, 11, 5]}],
+
+                    [1, {'path': [12, *road(20), 17]}],
+                    [1, {'path': [0, *road(20 + n), 7]}],
+
+                    [1, {'path': [13, *road(20 + 2 * n), 18]}],
+                    [1, {'path': [1, *road(20 + 3 * n), 4]}],
+
+                    [1, {'path': [14, *road(20 + 4 * n), 19]}],
+                    [1, {'path': [2, *road(20 + 5 * n), 5]}],
+
+                    [1, {'path': [15, *road(20 + 6 * n), 16]}],
+                    [1, {'path': [3, *road(20 + 7 * n), 6]}],
+
+                ]})
+
+    def draw_light_4lane_button(self):
+        if self.light_4lane_button.draw(self.screen, self.sim, self.text_font):
+            print('light4lane')
+            self.sim = Simulation()
+
+            # Play with these
+            n = 15
+            a = 2
+            b = 12
+            l = 300
+
+            # Nodes
+            WEST_RIGHT_START = (-b - l, a)
+            WEST_LEFT_START = (-b - l, -a)
+
+            SOUTH_RIGHT_START = (a, b + l)
+            SOUTH_LEFT_START = (-a, b + l)
+
+            EAST_RIGHT_START = (b + l, -a)
+            EAST_LEFT_START = (b + l, a)
+
+            NORTH_RIGHT_START = (-a, -b - l)
+            NORTH_LEFT_START = (a, -b - l)
+
+            WEST_RIGHT = (-b, a)
+            WEST_LEFT = (-b, -a)
+
+            SOUTH_RIGHT = (a, b)
+            SOUTH_LEFT = (-a, b)
+
+            EAST_RIGHT = (b, -a)
+            EAST_LEFT = (b, a)
+
+            NORTH_RIGHT = (-a, -b)
+            NORTH_LEFT = (a, -b)
+
+            WEST_RIGHT_START_1 = (-b - l, 3 * a)
+            WEST_LEFT_START_1 = (-b - l, -3 * a)
+            SOUTH_RIGHT_START_1 = (3 * a, b + l)
+            SOUTH_LEFT_START_1 = (-3 * a, b + l)
+            EAST_RIGHT_START_1 = (b + l, -3 * a)
+            EAST_LEFT_START_1 = (b + l, 3 * a)
+            NORTH_RIGHT_START_1 = (-3 * a, -b - l)
+            NORTH_LEFT_START_1 = (3 * a, -b - l)
+
+            WEST_RIGHT_1 = (-b, 3 * a)
+            WEST_LEFT_1 = (-b, -3 * a)
+            SOUTH_RIGHT_1 = (3 * a, b)
+            SOUTH_LEFT_1 = (-3 * a, b)
+            EAST_RIGHT_1 = (b, -3 * a)
+            EAST_LEFT_1 = (b, 3 * a)
+            NORTH_RIGHT_1 = (-3 * a, -b)
+            NORTH_LEFT_1 = (3 * a, -b)
+
+            # Roads
+            WEST_INBOUND = (WEST_RIGHT_START, WEST_RIGHT)
+            SOUTH_INBOUND = (SOUTH_RIGHT_START, SOUTH_RIGHT)
+            EAST_INBOUND = (EAST_RIGHT_START, EAST_RIGHT)
+            NORTH_INBOUND = (NORTH_RIGHT_START, NORTH_RIGHT)
+
+            WEST_OUTBOUND = (WEST_LEFT, WEST_LEFT_START)
+            SOUTH_OUTBOUND = (SOUTH_LEFT, SOUTH_LEFT_START)
+            EAST_OUTBOUND = (EAST_LEFT, EAST_LEFT_START)
+            NORTH_OUTBOUND = (NORTH_LEFT, NORTH_LEFT_START)
+
+            WEST_STRAIGHT = (WEST_RIGHT, EAST_LEFT)
+            SOUTH_STRAIGHT = (SOUTH_RIGHT, NORTH_LEFT)
+            EAST_STRAIGHT = (EAST_RIGHT, WEST_LEFT)
+            NORTH_STRAIGHT = (NORTH_RIGHT, SOUTH_LEFT)
+
+            WEST_STRAIGHT_1 = (WEST_RIGHT_1, EAST_LEFT_1)
+            SOUTH_STRAIGHT_1 = (SOUTH_RIGHT_1, NORTH_LEFT_1)
+            EAST_STRAIGHT_1 = (EAST_RIGHT_1, WEST_LEFT_1)
+            NORTH_STRAIGHT_1 = (NORTH_RIGHT_1, SOUTH_LEFT_1)
+            # WEST_RIGHT_TURN = turn_road(WEST_RIGHT, SOUTH_LEFT, TURN_RIGHT, n)
+            # WEST_LEFT_TURN = turn_road(WEST_RIGHT, NORTH_LEFT, TURN_LEFT, n)
+            #
+            # SOUTH_RIGHT_TURN = turn_road(SOUTH_RIGHT, EAST_LEFT, TURN_RIGHT, n)
+            # SOUTH_LEFT_TURN = turn_road(SOUTH_RIGHT, WEST_LEFT, TURN_LEFT, n)
+            #
+            # EAST_RIGHT_TURN = turn_road(EAST_RIGHT, NORTH_LEFT, TURN_RIGHT, n)
+            # EAST_LEFT_TURN = turn_road(EAST_RIGHT, SOUTH_LEFT, TURN_LEFT, n)
+            #
+            # NORTH_RIGHT_TURN = turn_road(NORTH_RIGHT, WEST_LEFT, TURN_RIGHT, n)
+            # NORTH_LEFT_TURN = turn_road(NORTH_RIGHT, EAST_LEFT, TURN_LEFT, n)
+
+            WEST_RIGHT_TURN = turn_road(WEST_RIGHT_1, SOUTH_LEFT_1, TURN_RIGHT, n)
+            WEST_LEFT_TURN = turn_road(WEST_RIGHT, NORTH_LEFT, TURN_LEFT, n)
+
+            SOUTH_RIGHT_TURN = turn_road(SOUTH_RIGHT_1, EAST_LEFT_1, TURN_RIGHT, n)
+            SOUTH_LEFT_TURN = turn_road(SOUTH_RIGHT, WEST_LEFT, TURN_LEFT, n)
+
+            EAST_RIGHT_TURN = turn_road(EAST_RIGHT_1, NORTH_LEFT_1, TURN_RIGHT, n)
+            EAST_LEFT_TURN = turn_road(EAST_RIGHT, SOUTH_LEFT, TURN_LEFT, n)
+
+            NORTH_RIGHT_TURN = turn_road(NORTH_RIGHT_1, WEST_LEFT_1, TURN_RIGHT, n)
+            NORTH_LEFT_TURN = turn_road(NORTH_RIGHT, EAST_LEFT, TURN_LEFT, n)
+
+            WEST_INBOUND_1 = (WEST_RIGHT_START_1, WEST_RIGHT_1)
+            SOUTH_INBOUND_1 = (SOUTH_RIGHT_START_1, SOUTH_RIGHT_1)
+            EAST_INBOUND_1 = (EAST_RIGHT_START_1, EAST_RIGHT_1)
+            NORTH_INBOUND_1 = (NORTH_RIGHT_START_1, NORTH_RIGHT_1)
+
+            WEST_OUTBOUND_1 = (WEST_LEFT_1, WEST_LEFT_START_1)
+            SOUTH_OUTBOUND_1 = (SOUTH_LEFT_1, SOUTH_LEFT_START_1)
+            EAST_OUTBOUND_1 = (EAST_LEFT_1, EAST_LEFT_START_1)
+            NORTH_OUTBOUND_1 = (NORTH_LEFT_1, NORTH_LEFT_START_1)
+
+            self.sim.create_roads([
+                WEST_INBOUND,  # 0
+                SOUTH_INBOUND,  # 1
+                EAST_INBOUND,  # 2
+                NORTH_INBOUND,  # 3
+
+                WEST_OUTBOUND,  # 4
+                SOUTH_OUTBOUND,  # 5
+                EAST_OUTBOUND,  # 6
+                NORTH_OUTBOUND,  # 7
+
+                WEST_STRAIGHT,  # 8
+                SOUTH_STRAIGHT,  # 9
+                EAST_STRAIGHT,  # 10
+                NORTH_STRAIGHT,  # 11
+
+                WEST_INBOUND_1,  # 12
+                SOUTH_INBOUND_1,  # 13
+                EAST_INBOUND_1,  # 14
+                NORTH_INBOUND_1,  # 15
+
+                WEST_OUTBOUND_1,  # 16
+                SOUTH_OUTBOUND_1,  # 17
+                EAST_OUTBOUND_1,  # 18
+                NORTH_OUTBOUND_1,  # 19
+
+                *WEST_RIGHT_TURN,  # 20
+                *WEST_LEFT_TURN,  # 20+1n
+
+                *SOUTH_RIGHT_TURN,  # 20+2n
+                *SOUTH_LEFT_TURN,  # 20+3n
+
+                *EAST_RIGHT_TURN,  # 20+4n
+                *EAST_LEFT_TURN,  # 20+5n
+
+                *NORTH_RIGHT_TURN,  # 20+6n
+                *NORTH_LEFT_TURN,  # 20+7n
+
+                WEST_STRAIGHT_1,
+                SOUTH_STRAIGHT_1,
+                EAST_STRAIGHT_1,
+                NORTH_STRAIGHT_1
+            ])
+
+            def road(a):
+                return range(a, a + n)
+
+            self.sim.create_gen({
+                'vehicle_rate': 10,
+                'vehicles': [
+                    # straight
+                    [3, {'path': [0, 8, 6]}],
+                    [3, {'path': [1, 9, 7]}],
+                    [3, {'path': [2, 10, 4]}],
+                    [3, {'path': [3, 11, 5]}],
+
+                    [1, {'path': [12, *road(20), 17]}],
+                    [1, {'path': [0, *road(20 + n), 7]}],
+
+                    [1, {'path': [13, *road(20 + 2 * n), 18]}],
+                    [1, {'path': [1, *road(20 + 3 * n), 4]}],
+
+                    [1, {'path': [14, *road(20 + 4 * n), 19]}],
+                    [1, {'path': [2, *road(20 + 5 * n), 5]}],
+
+                    [1, {'path': [15, *road(20 + 6 * n), 16]}],
+                    [1, {'path': [3, *road(20 + 7 * n), 6]}],
+
+                ]})
+            self.sim.create_signal([[0, 2], [1, 3]])
+            self.sim.create_signal([[12, 14], [13, 15]])
 
     def draw(self):
         # Fill background
@@ -324,3 +946,11 @@ class Window:
 
         # Draw status info
         self.draw_status()
+
+        # to draw buttons
+        self.draw_traffic_flow_button()
+        self.draw_vehicle_velocity_button()
+        self.draw_light_2lane_button()
+        self.draw_light_4lane_button()
+        self.draw_smart_2lane_button()
+        self.draw_smart_4lane_button()

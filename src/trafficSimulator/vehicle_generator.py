@@ -1,13 +1,12 @@
 from .vehicle import Vehicle
 from numpy.random import randint
 
-
 class VehicleGenerator:
-    def __init__(self, sim, config={}):
+    def __init__(self, sim, config={}, v_max=16.6, a_max=1.44, b_max=4.61):
         self.sim = sim
 
         # Set default configurations
-        self.set_default_config()
+        self.set_default_config(v_max,a_max,b_max)
 
         # Update configurations
         for attr, val in config.items():
@@ -16,13 +15,17 @@ class VehicleGenerator:
         # Calculate properties
         self.init_properties()
 
-    def set_default_config(self):
+    def set_default_config(self,v_max,a_max,b_max):
         """Set default configuration"""
         self.vehicle_rate = 20
         self.vehicles = [
             (1, {})
         ]
         self.last_added_time = 0
+
+        self.v_max = v_max
+        self.a_max = a_max
+        self.b_max = b_max
 
     def init_properties(self):
         self.upcoming_vehicle = self.generate_vehicle()
@@ -34,7 +37,7 @@ class VehicleGenerator:
         for (weight, config) in self.vehicles:
             r -= weight
             if r <= 0:
-                return Vehicle(config)
+                return Vehicle(config, self.v_max)
 
     def update(self):
         """Add vehicles"""

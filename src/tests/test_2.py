@@ -1,4 +1,4 @@
-from src.trafficSimulator import *
+from trafficSimulator import *
 
 # Create simulation
 sim = Simulation()

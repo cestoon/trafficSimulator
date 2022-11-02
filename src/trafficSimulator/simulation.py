@@ -3,7 +3,6 @@ from copy import deepcopy
 from .vehicle_generator import VehicleGenerator
 from .traffic_signal import TrafficSignal
 
-
 class Simulation:
     def __init__(self, config={}):
         # Set default configuration
@@ -14,13 +13,12 @@ class Simulation:
             setattr(self, attr, val)
 
     def set_default_config(self):
-        self.t = 0.0  # Time keeping
-        self.frame_count = 0  # Frame count keeping
-        self.dt = 1 / 60  # Simulation time step
-        self.roads = []  # Array to store roads
+        self.t = 0.0            # Time keeping
+        self.frame_count = 0    # Frame count keeping
+        self.dt = 1/60          # Simulation time step
+        self.roads = []         # Array to store roads
         self.generators = []
         self.traffic_signals = []
-        self.hide_signal = False
 
     def create_road(self, start, end):
         road = Road(start, end)
@@ -40,7 +38,6 @@ class Simulation:
         roads = [[self.roads[i] for i in road_group] for road_group in roads]
         sig = TrafficSignal(roads, config)
         self.traffic_signals.append(sig)
-        self.hide_signal = sig.hide_signal
         return sig
 
     def update(self):
@@ -74,10 +71,11 @@ class Simulation:
                     next_road_index = vehicle.path[vehicle.current_road_index]
                     self.roads[next_road_index].vehicles.append(new_vehicle)
                 # In all cases, remove it from its road
-                road.vehicles.popleft()
-                # Increment time
+                road.vehicles.popleft() 
+        # Increment time
         self.t += self.dt
         self.frame_count += 1
+
 
     def run(self, steps):
         for _ in range(steps):
