@@ -14,7 +14,7 @@ class VehicleGenerator:
 
         # Calculate properties
         self.init_properties()
-
+        self.total = 0
     def set_default_config(self,v_max,a_max,b_max):
         """Set default configuration"""
         self.vehicle_rate = 20
@@ -37,7 +37,7 @@ class VehicleGenerator:
         for (weight, config) in self.vehicles:
             r -= weight
             if r <= 0:
-                return Vehicle(config, self.v_max)
+                return Vehicle(config, self.v_max, self.sim.t)
 
     def update(self):
         """Add vehicles"""

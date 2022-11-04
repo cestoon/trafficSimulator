@@ -1,9 +1,9 @@
 import numpy as np
 
 class Vehicle:
-    def __init__(self, config={},v_max=16.6):
+    def __init__(self, config={},v_max=16.6, born_time = 0):
         # Set default configuration
-        self.set_default_config(v_max)
+        self.set_default_config(v_max,born_time)
 
         # Update configuration
         for attr, val in config.items():
@@ -12,7 +12,9 @@ class Vehicle:
         # Calculate properties
         self.init_properties()
 
-    def set_default_config(self,v_max):
+    def set_default_config(self,v_max,born_time):
+        self.born_time = born_time
+        self.life = 3
         self.l = 4
         self.s0 = 4
         self.T = 1
@@ -45,6 +47,7 @@ class Vehicle:
         alpha = 0
         if lead:
             delta_x = lead.x - self.x - lead.l
+
             delta_v = self.v - lead.v
 
             alpha = (self.s0 + max(0, self.T*self.v + delta_v*self.v/self.sqrt_ab)) / delta_x

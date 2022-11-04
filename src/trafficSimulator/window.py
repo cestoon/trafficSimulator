@@ -1,7 +1,7 @@
 import numpy as np
 import pygame
 from src.trafficSimulator.button import traffic_flow_button, vehicle_velocity_button, scene_light_2lane_button, scence_round_button, scence_light_4lane_button, scence_smart_4lane_button,scence_smart_2lane_button
-from src.trafficSimulator import Simulation, TURN_LEFT, TURN_RIGHT, turn_road, curve_road
+from src.trafficSimulator import Simulation, TURN_LEFT, TURN_RIGHT, turn_road, curve_road, vehicle_generator
 from pygame import gfxdraw
 import os
 
@@ -340,9 +340,17 @@ class Window:
     def draw_status(self):
         text_fps = self.text_font.render(f't={self.sim.t:.5}', False, (0, 0, 0))
         text_frc = self.text_font.render(f'n={self.sim.frame_count}', False, (0, 0, 0))
-
         self.screen.blit(text_fps, (0, 0))
         self.screen.blit(text_frc, (100, 0))
+
+    def draw_summary(self):
+        text_wait = self.text_font.render(f'Average Passing Time={self.sim.waittime/(1+self.sim.throughput)}', False, (0, 0, 0))
+        text_crash = self.text_font.render(f'Crash={self.sim.crashtime}', False, (0, 0, 0))
+        text_throughput = self.text_font.render(f'Throughput={self.sim.throughput}', False, (0, 0, 0))
+        self.screen.blit(text_wait, (1000,0 ))
+        self.screen.blit(text_crash, (1000, 20))
+        self.screen.blit(text_throughput, (1000, 40))
+
 
     def draw_traffic_flow_button(self):
         # to draw buttons
@@ -1078,3 +1086,5 @@ class Window:
         self.draw_smart_2lane_button()
         self.draw_smart_4lane_button()
         self.draw_round_button()
+        self.draw_summary()
+
