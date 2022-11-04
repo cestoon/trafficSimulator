@@ -5,7 +5,6 @@ from .traffic_signal import TrafficSignal
 from .vehicle_pool import VehiclePool
 
 
-
 class Simulation:
     def __init__(self, config={}):
         # Set default configuration
@@ -18,13 +17,12 @@ class Simulation:
             setattr(self, attr, val)
 
     def set_default_config(self):
-        self.t = 0.0  # Time keeping
-        self.frame_count = 0  # Frame count keeping
-        self.dt = 1 / 60  # Simulation time step
-        self.roads = []  # Array to store roads
+        self.t = 0.0            # Time keeping
+        self.frame_count = 0    # Frame count keeping
+        self.dt = 1/60          # Simulation time step
+        self.roads = []         # Array to store roads
         self.generators = []
         self.traffic_signals = []
-        self.hide_signal = False
 
     def create_road(self, start, end, road_count):
         road = Road(start, end, road_count)
@@ -46,7 +44,6 @@ class Simulation:
         roads = [[self.roads[i] for i in road_group] for road_group in roads]
         sig = TrafficSignal(roads, config)
         self.traffic_signals.append(sig)
-        self.hide_signal = sig.hide_signal
         return sig
 
     def update(self):
@@ -61,8 +58,9 @@ class Simulation:
         for signal in self.traffic_signals:
             signal.update(self)
 
-        # update vehicle pool after roads
-        self.vehicle_pool.update(self.dt)
+        if len(self.paths) > 0:
+            # update vehicle pool after roads
+            self.vehicle_pool.update(self.dt)
 
         # Check roads for out of bounds vehicle
         for road in self.roads:
@@ -83,10 +81,11 @@ class Simulation:
                     next_road_index = vehicle.path[vehicle.current_road_index]
                     self.roads[next_road_index].vehicles.append(new_vehicle)
                 # In all cases, remove it from its road
-                road.vehicles.popleft()
-                # Increment time
+                road.vehicles.popleft() 
+        # Increment time
         self.t += self.dt
         self.frame_count += 1
+
 
     def run(self, steps):
         for _ in range(steps):

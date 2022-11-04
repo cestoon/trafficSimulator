@@ -1,5 +1,4 @@
 from src.trafficSimulator import Vehicle
-from copy import deepcopy
 from numpy.random import randint
 
 

@@ -1,3 +1,4 @@
+import numpy as np
 from src.trafficSimulator import *
 
 sim = Simulation()
@@ -11,29 +12,29 @@ r = 10
 l = 300
 
 # Nodes
-WEST_RIGHT_START = (-b - l, a - c)
-WEST_LEFT_START = (-b - l, -a - c)
+WEST_RIGHT_START = (-b-l, a-c)
+WEST_LEFT_START =	(-b-l, -a-c)
 
-SOUTH_RIGHT_START = (a - c, b + l)
-SOUTH_LEFT_START = (-a - c, b + l)
+SOUTH_RIGHT_START = (a-c, b+l)
+SOUTH_LEFT_START = (-a-c, b+l)
 
-EAST_RIGHT_START = (b + l, -a + c)
-EAST_LEFT_START = (b + l, a + c)
+EAST_RIGHT_START = (b+l, -a+c)
+EAST_LEFT_START = (b+l, a+c)
 
-NORTH_RIGHT_START = (-a + c, -b - l)
-NORTH_LEFT_START = (a + c, -b - l)
+NORTH_RIGHT_START = (-a+c, -b-l)
+NORTH_LEFT_START = (a+c, -b-l)
 
-WEST_RIGHT = (-b, a - c)
-WEST_LEFT = (-b, -a - c)
+WEST_RIGHT = (-b, a-c)
+WEST_LEFT =	(-b, -a-c)
 
-SOUTH_RIGHT = (a - c, b)
-SOUTH_LEFT = (-a - c, b)
+SOUTH_RIGHT = (a-c, b)
+SOUTH_LEFT = (-a-c, b)
 
-EAST_RIGHT = (b, -a + c)
-EAST_LEFT = (b, a + c)
+EAST_RIGHT = (b, -a+c)
+EAST_LEFT = (b, a+c)
 
-NORTH_RIGHT = (-a + c, -b)
-NORTH_LEFT = (a + c, -b)
+NORTH_RIGHT = (-a+c, -b)
+NORTH_LEFT = (a+c, -b)
 
 WEST = (-r, c)
 SOUTH = (c, r)
@@ -93,28 +94,26 @@ sim.create_roads([
     *NORTH_WEST
 ])
 
-
-def road(a): return range(a, a + n)
-
+def road(a): return range(a, a+n)
 
 sim.create_gen({
     'vehicle_rate': 30,
     'vehicles': [
-        [2, {'path': [0, *road(12), *road(12 + 4 * n), 10, 6]}],
+        [2, {'path': [0, *road(12), *road(12+4*n), 10, 6]}],
         [1, {'path': [0, *road(12), 9, 5]}],
-        [1, {'path': [0, *road(12), *road(12 + 4 * n), *road(12 + 5 * n), 11, 7]}],
+        [1, {'path': [0, *road(12), *road(12+4*n), *road(12+5*n), 11, 7]}],
 
-        [2, {'path': [1, *road(12 + n), *road(12 + 5 * n), 11, 7]}],
-        [1, {'path': [1, *road(12 + n), 10, 6]}],
-        [1, {'path': [1, *road(12 + n), *road(12 + 5 * n), *road(12 + 6 * n), 8, 4]}],
+        [2, {'path': [1, *road(12+n), *road(12+5*n), 11, 7]}],
+        [1, {'path': [1, *road(12+n), 10, 6]}],
+        [1, {'path': [1, *road(12+n), *road(12+5*n), *road(12+6*n), 8, 4]}],
 
-        [2, {'path': [2, *road(12 + 2 * n), *road(12 + 6 * n), 8, 4]}],
-        [1, {'path': [2, *road(12 + 2 * n), 11, 7]}],
-        [1, {'path': [2, *road(12 + 2 * n), *road(12 + 6 * n), *road(12 + 7 * n), 9, 5]}],
+        [2, {'path': [2, *road(12+2*n), *road(12+6*n), 8, 4]}],
+        [1, {'path': [2, *road(12+2*n), 11, 7]}],
+        [1, {'path': [2, *road(12+2*n), *road(12+6*n), *road(12+7*n), 9, 5]}],
 
-        [2, {'path': [3, *road(12 + 3 * n), *road(12 + 7 * n), 9, 5]}],
-        [1, {'path': [3, *road(12 + 3 * n), 8, 4]}],
-        [1, {'path': [3, *road(12 + 3 * n), *road(12 + 7 * n), *road(12 + 4 * n), 10, 6]}],
+        [2, {'path': [3, *road(12+3*n), *road(12+7*n), 9, 5]}],
+        [1, {'path': [3, *road(12+3*n), 8, 4]}],
+        [1, {'path': [3, *road(12+3*n), *road(12+7*n), *road(12+4*n), 10, 6]}],
 
     ]
 })
