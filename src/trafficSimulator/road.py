@@ -3,12 +3,11 @@ from collections import deque
 
 
 class Road:
-    def __init__(self, start, end):
+    def __init__(self, start, end, road_count):
+        self.id = road_count
         self.start = start
         self.end = end
-
         self.vehicles = deque()
-
         self.init_properties()
 
     def init_properties(self):

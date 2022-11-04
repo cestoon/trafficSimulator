@@ -2,12 +2,16 @@ from .road import Road
 from copy import deepcopy
 from .vehicle_generator import VehicleGenerator
 from .traffic_signal import TrafficSignal
+from .vehicle_pool import VehiclePool
+
 
 
 class Simulation:
     def __init__(self, config={}):
         # Set default configuration
+        self.vehicle_pool = VehiclePool(self)
         self.set_default_config()
+        self.paths = []
 
         # Update configuration
         for attr, val in config.items():
@@ -22,14 +26,16 @@ class Simulation:
         self.traffic_signals = []
         self.hide_signal = False
 
-    def create_road(self, start, end):
-        road = Road(start, end)
+    def create_road(self, start, end, road_count):
+        road = Road(start, end, road_count)
         self.roads.append(road)
         return road
 
     def create_roads(self, road_list):
+        road_count = 0
         for road in road_list:
-            self.create_road(*road)
+            self.create_road(*road, road_count)
+            road_count += 1
 
     def create_gen(self, config={}):
         gen = VehicleGenerator(self, config)
@@ -54,6 +60,9 @@ class Simulation:
 
         for signal in self.traffic_signals:
             signal.update(self)
+
+        # update vehicle pool after roads
+        self.vehicle_pool.update(self.dt)
 
         # Check roads for out of bounds vehicle
         for road in self.roads:
