@@ -115,26 +115,31 @@ def road(a): return range(a, a + n)
 #     ]
 # })
 
-sim.paths += [
+'''
+# !!! vehicle were randomly assign with path based on weight
+# and we only enable vehicle pool when sim's paths is not empty,
+path -> roads
+'''
+sim.paths = [
     {
         'id': 1,
         'weight': 1,
-        'path': [1, 9, 7]
+        'roads': [1, 9, 7]
     },
     {
         'id': 2,
         'weight': 2,
-        'path': [2, 10, 4]
+        'roads': [2, 10, 4]
     },
     {
         'id': 3,
         'weight': 2,
-        'path': [1, *road(12 + 2 * n), 6]
+        'roads': [1, *road(12 + 2 * n), 6]
     }
 ]
 
-#sim.create_signal([[0, 2], [1, 3]])
+sim.create_signal([[0, 2], [1, 3]])
 # Start simulation
 win = Window(sim)
-win.zoom = 1
-win.run(steps_per_update=30)
+win.zoom = 10
+win.run(steps_per_update=20)

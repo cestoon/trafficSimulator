@@ -22,13 +22,21 @@ class VehiclePool:
                 r -= pa['weight']
                 if r <= 0:
                     vehicle.path = pa
-                    vehicle.road_id = pa['path'][0]
+                    vehicle.road_id = pa['roads'][0]
                     vehicle.current_road_index = 0
                     break
             # 3. add to list
             self.vehicle_pool_list.append(vehicle)
             # 4.Reset last_added_time
             self.last_added_time = self.sim.t
+
+    def find_lead(self, vehicle):
+        ve_list = [ve for ve in self.vehicle_pool_list if ve.road_id == vehicle.road_id
+                   and ve.id < vehicle.id]
+        if len(ve_list) > 0:
+            return ve_list[len(ve_list)-1]
+        else:
+            return None
 
     def update(self, dt):
         # add vehicle
@@ -40,13 +48,32 @@ class VehiclePool:
             road = self.sim.roads[vehicle.road_id]
             if vehicle.x >= road.length:
                 # If vehicle has a next road
-                if vehicle.current_road_index + 1 < len(vehicle.path['path']):
+                if vehicle.current_road_index + 1 < len(vehicle.path['roads']):
                     # Add it to the next road
                     vehicle.current_road_index += 1
-                    vehicle.road_id = vehicle.path['path'][vehicle.current_road_index]
+                    vehicle.road_id = vehicle.path['roads'][vehicle.current_road_index]
                     vehicle.x = 0
                 else:
                     self.vehicle_pool_list.remove(vehicle)
-            # find the lead car
-            vehicle.update(None, dt)
 
+            # # find the lead car
+            lead = self.find_lead(vehicle)
+            vehicle.update(lead, dt)
+
+            # Check for traffic signal
+            signal_state = True
+            if road.has_traffic_signal:
+                # If traffic signal is green or doesn't exist, then let vehicles pass
+                i = road.traffic_signal_group
+                signal_state = road.traffic_signal.current_cycle[i]
+            # green or no signal
+            if signal_state:
+                if lead is None:
+                    vehicle.unstop()
+                vehicle.unslow()
+            else:
+                if lead is None:
+                    if vehicle.x >= road.length - road.traffic_signal.slow_distance:
+                        vehicle.slow(road.traffic_signal.slow_factor * vehicle._v_max)
+                    if road.length - road.traffic_signal.stop_distance <= vehicle.x <= road.length - road.traffic_signal.stop_distance / 2:
+                        vehicle.stop()

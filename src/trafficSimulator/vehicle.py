@@ -2,7 +2,7 @@ import numpy as np
 
 
 class Vehicle:
-    def __init__(self, config={}, v_max=16.6):
+    def __init__(self, config={}, v_max=8.6):
         # Set default configuration
         self.set_default_config(v_max)
 
