@@ -21,20 +21,33 @@ sim.create_roads([
     *curve_road((250, 10), (160, 90), (210, 90), resolution=n)
 ])
 
-sim.create_gen({
-    'vehicle_rate': 60,
-    'vehicles': [
-        [3, {"path": [0]}],
-        [6, {"path": [1]}],
-        
-        [3, {"path": [3, 4]}],
-        [6, {"path": [2]}],
-   
-        [1, {"path": [*range(7, 7+n), 6, 5, 4]}]
-
-    ]
-})
-
+sim.paths = [
+    {
+        'id': 1,
+        'weight': 3,
+        'roads': [0],
+    },
+    {
+        'id': 2,
+        'weight': 6,
+        'roads': [1],
+    },
+    {
+        'id': 3,
+        'weight': 3,
+        'roads': [3, 4],
+    },
+    {
+        'id': 4,
+        'weight': 6,
+        'roads': [2],
+    },
+    {
+        'id': 5,
+        'weight': 1,
+        'roads': [*range(7, 7 + n), 6, 5, 4],
+    }
+]
 
 # Start simulation
 win = Window(sim)

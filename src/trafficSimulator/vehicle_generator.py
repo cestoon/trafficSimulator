@@ -2,7 +2,7 @@ from .vehicle import Vehicle
 from numpy.random import randint
 
 class VehicleGenerator:
-    def __init__(self, sim, config={}, v_max=16.6, a_max=1.44, b_max=4.61):
+    def __init__(self, sim, config={}, v_max=8.6, a_max=1.44, b_max=4.61):
         self.sim = sim
 
         # Set default configurations
