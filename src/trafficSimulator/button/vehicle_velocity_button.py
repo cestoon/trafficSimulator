@@ -15,7 +15,7 @@ class Button():
         self.minus_rect.topleft = (x+210, y)
         self.minus_clicked = False
 
-    def draw(self, surface, generator, text_font):
+    def draw(self, surface, vehicle_pool, text_font):
         action = False
         # get mouse position
         pos = pygame.mouse.get_pos()
@@ -25,7 +25,8 @@ class Button():
             if pygame.mouse.get_pressed()[0] == 1 and self.plus_clicked == False:
                 self.plus_clicked = True
                 action = True
-                generator.v_max += 1
+                vehicle_pool.v_max += 1
+                # generator.v_max += 1
                 print('increase 1')
 
         if pygame.mouse.get_pressed()[0] == 0:
@@ -35,7 +36,7 @@ class Button():
             if pygame.mouse.get_pressed()[0] == 1 and self.minus_clicked == False:
                 self.minus_clicked = True
                 action = True
-                generator.v_max -= 1
+                vehicle_pool.v_max -= 1
                 print('decrease 1')
 
         if pygame.mouse.get_pressed()[0] == 0:
@@ -46,7 +47,7 @@ class Button():
         surface.blit(self.minus_image, (self.minus_rect.x, self.minus_rect.y))
 
         # To draw text
-        text_fps = text_font.render(f'max_velocity={generator.v_max}', False, (0, 0, 0))
+        text_fps = text_font.render(f'max_velocity={vehicle_pool.v_max}', False, (0, 0, 0))
         surface.blit(text_fps, (self.plus_rect.x - 190, self.plus_rect.y))
 
         return action

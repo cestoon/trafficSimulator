@@ -35,11 +35,6 @@ class Simulation:
             self.create_road(*road, road_count)
             road_count += 1
 
-    # def create_gen(self, config={}):
-    #     gen = VehicleGenerator(self, config)
-    #     self.generators.append(gen)
-    #     return gen
-
     def create_signal(self, roads, config={}):
         roads = [[self.roads[i] for i in road_group] for road_group in roads]
         sig = TrafficSignal(roads, config)
@@ -47,38 +42,12 @@ class Simulation:
         return sig
 
     def update(self):
-        # # Update every road
-        # for road in self.roads:
-        #     road.update(self.dt)
-
         for signal in self.traffic_signals:
             signal.update(self)
 
         if len(self.paths) > 0:
             # update vehicle pool after updated roads
             self.vehicle_pool.update(self.dt)
-
-        # # Check roads for out of bounds vehicle
-        # for road in self.roads:
-        #     # If road has no vehicles, continue
-        #     if len(road.vehicles) == 0:
-        #         continue
-        #     # If not
-        #     vehicle = road.vehicles[0]
-        #     # If first vehicle is out of road bounds
-        #     if vehicle.x >= road.length:
-        #         # If vehicle has a next road
-        #         if vehicle.current_road_index + 1 < len(vehicle.path):
-        #             # Update current road to next road
-        #             vehicle.current_road_index += 1
-        #             # Create a copy and reset some vehicle properties
-        #             new_vehicle = deepcopy(vehicle)
-        #             new_vehicle.x = 0
-        #             # Add it to the next road
-        #             next_road_index = vehicle.path[vehicle.current_road_index]
-        #             self.roads[next_road_index].vehicles.append(new_vehicle)
-        #         # In all cases, remove it from its road
-        #         road.vehicles.popleft()
 
         # Increment time
         self.t += self.dt

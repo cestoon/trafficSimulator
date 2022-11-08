@@ -1,7 +1,6 @@
 import numpy as np
 import pygame
 from src.trafficSimulator.button import traffic_flow_button, vehicle_velocity_button, scene_light_2lane_button, scence_round_button, scence_light_4lane_button, scence_smart_4lane_button,scence_smart_2lane_button
-from src.trafficSimulator import Simulation, TURN_LEFT, TURN_RIGHT, turn_road, curve_road
 from pygame import gfxdraw
 import os
 from src.examples.roundabout import round_about
@@ -365,17 +364,13 @@ class Window:
         self.screen.blit(text_frc, (100, 0))
 
     def draw_traffic_flow_button(self):
-        if len(self.sim.generators) == 0:
-            return
         # to draw buttons
-        if self.traffic_flow_button.draw(self.screen, self.sim.generators[0], self.text_font):
+        if self.traffic_flow_button.draw(self.screen, self.sim.vehicle_pool, self.text_font):
             print('flow')
 
     def draw_vehicle_velocity_button(self):
-        if len(self.sim.generators) == 0:
-            return
         # to draw buttons
-        if self.vehicle_velocity_button.draw(self.screen, self.sim.generators[0], self.text_font):
+        if self.vehicle_velocity_button.draw(self.screen, self.sim.vehicle_pool, self.text_font):
             print('velocity')
 
     def draw_light_2lane_button(self):

@@ -9,12 +9,14 @@ class VehiclePool:
         self.last_added_time = 0
         self.vehicle_rate = 20
         self.vehicle_count = 0
+        self.v_max = 8
+
 
     def vehicle_generator(self):
         if self.sim.t - self.last_added_time >= 60 / self.vehicle_rate:
             # 1. create vehicle, assign id to each vehicle
             self.vehicle_count += 1
-            vehicle = Vehicle({'id': self.vehicle_count})
+            vehicle = Vehicle({'id': self.vehicle_count},self.v_max)
             # 2. assign a path to the vehicle base on weight
             total_weight = sum(path['weight'] for path in self.sim.paths)
             r = randint(1, total_weight + 1)
@@ -29,6 +31,7 @@ class VehiclePool:
             self.vehicle_pool_list.append(vehicle)
             # 4.Reset last_added_time
             self.last_added_time = self.sim.t
+
 
     def find_lead(self, vehicle):
         ve_list = [ve for ve in self.vehicle_pool_list if ve.road_id == vehicle.road_id
