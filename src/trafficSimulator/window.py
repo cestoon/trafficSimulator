@@ -342,9 +342,11 @@ class Window:
                 for vehicle in road.vehicles:
                     self.draw_vehicle(vehicle, road)
 
+
     def draw_summary(self):
-        text_wait = self.text_font.render(f'Average Waiting Time={(self.sim.waittime-self.sim.besttime*self.sim.passingcars)}', False, (0, 0, 0))
-        text_crash = self.text_font.render(f'Crash={self.sim.crashtime}', False, (0, 0, 0))
+
+        text_wait = self.text_font.render(f'Average Waiting Time={(self.sim.waittime/(self.sim.passingcars+1))}', False, (0, 0, 0))
+        text_crash = self.text_font.render(f'CO2 Emission={self.sim.vehicle_pool.total_co2}', False, (0, 0, 0))
         text_throughput = self.text_font.render(f'Throughput={self.sim.throughput}', False, (0, 0, 0))
         text_besttime = self.text_font.render(f'Best Passing Time={self.sim.besttime}', False, (0, 0, 0))
         text_lasttime = self.text_font.render(f'Last Passing Time={self.sim.currentusage}', False, (0, 0, 0))
@@ -412,16 +414,10 @@ class Window:
     def draw(self):
         # Fill background
         self.background(*self.bg_color)
-
-        # Major and minor grid and axes
-        # self.draw_grid(10, (220,220,220))
-        # self.draw_grid(100, (200,200,200))
-        # self.draw_axes()
-
         self.draw_roads()
         self.draw_vehicles()
         self.draw_signals()
-
+        # self.count_co2()
         # Draw status info
         self.draw_status()
 
@@ -429,8 +425,7 @@ class Window:
         self.draw_traffic_flow_button()
         self.draw_vehicle_velocity_button()
         self.draw_light_2lane_button()
-        self.draw_light_4lane_button()
+        # self.draw_light_4lane_button()
         self.draw_smart_2lane_button()
-        self.draw_smart_4lane_button()
-        self.draw_round_button()
+        # self.draw_smart_4lane_button()
         self.draw_summary()

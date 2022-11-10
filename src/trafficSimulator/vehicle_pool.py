@@ -18,6 +18,7 @@ class VehiclePool:
         self.vehicle_rate = 20
         self.vehicle_count = 0
         self.v_max = 8
+        self.total_co2 = 0
         # self.postion = []
 
 
@@ -40,6 +41,7 @@ class VehiclePool:
             self.vehicle_pool_list.append(vehicle)
             # 4.Reset last_added_time
             self.last_added_time = self.sim.t
+
 
 
     def find_lead(self, vehicle):
@@ -74,7 +76,8 @@ class VehiclePool:
                     self.vehicle_pool_list.remove(vehicle)
                     vehicle.outroadtime=self.sim.t
                     self.sim.currentusage = (vehicle.outroadtime - vehicle.inroadtime)
-                    self.sim.waittime+=self.sim.currentusage
+                    self.sim.waittime += (self.sim.currentusage - self.sim.besttime)
+                    # self.sim.waittime+=self.sim.currentusage
                     if self.sim.besttime==0:
                         self.sim.besttime = self.sim.currentusage
                     if self.sim.currentusage<=self.sim.besttime:
@@ -170,7 +173,7 @@ class VehiclePool:
                         if (vehicle_index == 0 and len(self.vehicles_in_collision) <= 1 and (self.sim.t - self.last_pass_time > 10)):
                             vehicle.unstop()
                             vehicle.unslow()
-                        elif (self.vehicles_in_buffer[0].stopped==True ) and (lead is None) and (vehicle.current_road_index>0) and (self.sim.t - self.last_pass_time > 10):
+                        elif (self.vehicles_in_buffer[0].stopped==True ) and (lead is None) and (vehicle.current_road_index>0) and (self.sim.t - self.last_pass_time > 6):
                             self.vehicles_in_collision.append(vehicle)
                             self.last_pass_time = self.sim.t
                             # self.vehicles_in_buffer.remove(vehicle)
@@ -216,3 +219,5 @@ class VehiclePool:
                 if vehicle in self.vehicles_in_collision:
                     vehicle.unstop()
                     vehicle.unslow()
+        for vehicle in self.vehicle_pool_list:
+            self.total_co2 = self.total_co2 + vehicle.co2em

@@ -119,7 +119,8 @@ def smart_2lane():
             'id': 1,
             'weight': 10,
             'roads': [0, 12, 8, 6],
-            'collision_path' : [4,10,12,5,6,9]
+            'collision_path' : [4,10,12,5,6,9],
+            # 'length' : [l,c,2*b,b+c+l]
         },
         {
             'id': 2,
@@ -127,7 +128,8 @@ def smart_2lane():
             'roads': [0, 12,*road(16), 5],
             'buffer_index': 1,
             'road_without_collision': [0, 1],
-            'collision_path': [10 ,9]
+            'collision_path': [10 ,9],
+            # 'length': [l, c, 0.8, b + c + l]
         },
         {
             'id': 3,
@@ -141,7 +143,8 @@ def smart_2lane():
             'roads': [1, 13, 9, 7],
             'buffer_index': 1,
             'road_without_collision': [1, 13, 7],
-            'collision_path': [1,7,3,9,8,12]
+            'collision_path': [1,7,3,9,8,12],
+            'length': [l, c, 2 * b, b + c + l]
         },
         {
             'id': 5,
@@ -165,7 +168,8 @@ def smart_2lane():
             'roads': [2, 14, 10, 4],
             'buffer': [14],
             'road_without_collision': [2, 14, 4],
-            'collision_path': [4,10,6,11,12,3]
+            'collision_path': [4,10,6,11,12,3],
+            'length': [l, c, 2 * b, b + c + l]
 
         },
         {
@@ -198,7 +202,8 @@ def smart_2lane():
             'roads': [3, 15, *road(16 + 6 * n), 4],
             'buffer': [15],
             'road_without_collision': [3, 15, 4],
-            'collision_path': [7,6]
+            'collision_path': [7,6],
+            'length': [l, c, 2 * b, b + c + l]
         },
         {
             'id': 12,

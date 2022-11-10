@@ -24,13 +24,23 @@ class Vehicle:
         # self.position = position
         self.inroadtime = 0
         self.outroadtime = 0
+        self.co2em1=0
+        self.co2em2=0
+        self.co2em = 0
+        self.lastp=0
 
         self.path = []
         self.current_road_index = 0
         self.priority = 999
         self.from_which_direction =''
 
+        self.rollingRes = 0.018  # wheelonroad
+        self.engineEff = 0.35  # fuel2force
+        self.oil2co2 = 0.785  # kg/L
+        self.fuelheat = 9.3278  # L/kWh
+
         self.x = 0
+        self.total_x = 0
         self.v = self.v_max
         self.a = 0
         self.stopped = False
@@ -57,6 +67,7 @@ class Vehicle:
         elif self.path['roads'][0] == 3:
             self.from_which_direction = 'NORTH'
 
+
         #update is_in_buffer
         if self.current_road_index == 1:
             self.is_in_buffer = True
@@ -68,7 +79,9 @@ class Vehicle:
         else:
             self.is_in_collision = False
 
+
         # Update position and velocity
+        self.lastp = self.x
         if self.v + self.a * dt < 0:
             self.x -= 1 / 2 * self.v * self.v / self.a
             self.v = 0
@@ -86,6 +99,17 @@ class Vehicle:
 
         if self.stopped:
             self.a = -self.b_max * self.v / self.v_max
+
+        # self.total_x = self.total_x + self.x
+
+        self.co2em1 = 0
+        self.co2em2 = 0
+        if self.a == 0:
+            self.co2em1 = self.rollingRes * 1250 * 0.98 * (self.x - self.lastp) /3600/ 1000 / self.fuelheat / self.oil2co2
+        elif self.a > 0:
+            self.co2em2 = 1250 * self.a * 0.98 * (self.x - self.lastp)/ 3600 / 1000 / self.fuelheat / self.oil2co2
+
+        self.co2em += self.co2em1 + self.co2em2
 
     def stop(self):
         self.stopped = True
