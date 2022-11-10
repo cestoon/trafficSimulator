@@ -9,7 +9,12 @@ class VehiclePool:
         self.vehicle_pool_list = []
         self.vehicles_in_buffer =[]
         self.vehicles_in_collision = []
+        self.vehicles_in_buffer_west = []
+        self.vehicles_in_buffer_south = []
+        self.vehicles_in_buffer_east = []
+        self.vehicles_in_buffer_north = []
         self.last_added_time = 0
+        self.last_pass_time = 0
         self.vehicle_rate = 20
         self.vehicle_count = 0
         self.v_max = 8
@@ -47,7 +52,8 @@ class VehiclePool:
 
     def update(self, dt):
         # add vehicle
-        self.vehicle_generator()
+        if len(self.vehicle_pool_list)<40:
+            self.vehicle_generator()
 
         # update vehicle's status
         for vehicle in self.vehicle_pool_list:
@@ -78,26 +84,59 @@ class VehiclePool:
             # update vehicles_in_buffer
             if (vehicle.already_in_buffer==False) & (vehicle.is_in_buffer == True):
                 self.vehicles_in_buffer.append(vehicle)
+                if(vehicle.from_which_direction == 'WEST'):
+                    self.vehicles_in_buffer_west.append(vehicle)
+                elif (vehicle.from_which_direction == 'SOUTH'):
+                    self.vehicles_in_buffer_south.append(vehicle)
+                elif (vehicle.from_which_direction == 'EAST'):
+                    self.vehicles_in_buffer_east.append(vehicle)
+                elif (vehicle.from_which_direction == 'NORTH'):
+                    self.vehicles_in_buffer_north.append(vehicle)
+
                 vehicle.already_in_buffer = True
+
                 vehicle.color = (255,255,0)
                 vehicle.time_reach_buffer = self.sim.t
-                vehicle.time_reach_collision = self.sim.t + 5 + 30
-                vehicle.time_out_collision = self.sim.t + 10 + 30
+                vehicle.time_reach_collision = self.sim.t + 60
+                vehicle.time_out_collision = self.sim.t + 200
             elif(vehicle.already_in_buffer==True) & (vehicle.is_in_buffer == False):
                 self.vehicles_in_buffer.remove(vehicle)
+                if (vehicle.from_which_direction == 'WEST'):
+                    self.vehicles_in_buffer_west.remove(vehicle)
+                elif (vehicle.from_which_direction == 'SOUTH'):
+                    self.vehicles_in_buffer_south.remove(vehicle)
+                elif (vehicle.from_which_direction == 'EAST'):
+                    self.vehicles_in_buffer_east.remove(vehicle)
+                elif (vehicle.from_which_direction == 'NORTH'):
+                    self.vehicles_in_buffer_north.remove(vehicle)
                 vehicle.already_in_buffer = False
                 vehicle.is_in_collision = True
                 vehicle.color = (255,0,0)
+
+                # vehicle.time_reach_collision = self.sim.t
+            elif (vehicle.already_in_buffer == True) & (vehicle.is_in_buffer == True):
+                # update priority
+                if (vehicle.from_which_direction == 'WEST'):
+                    vehicle.priority = 2 * self.vehicles_in_buffer_west.index(vehicle)
+                elif (vehicle.from_which_direction == 'SOUTH'):
+                    vehicle.priority = 2 * self.vehicles_in_buffer_south.index(vehicle)
+                elif (vehicle.from_which_direction == 'EAST'):
+                    vehicle.priority = 2 * self.vehicles_in_buffer_east.index(vehicle) + 1
+                elif (vehicle.from_which_direction == 'NORTH'):
+                    vehicle.priority = 2 * self.vehicles_in_buffer_north.index(vehicle) + 1
 
             # update vehicles_in_collision
             if (vehicle.already_in_collision == False) & (vehicle.is_in_collision == True):
                 self.vehicles_in_collision.append(vehicle)
                 vehicle.already_in_collision = True
+                self.last_pass_time = self.sim.t
             elif (vehicle.already_in_collision == True) & (vehicle.is_in_collision == False):
                 self.vehicles_in_collision.remove(vehicle)
                 vehicle.already_in_collision = False
                 vehicle.already_out_collision = True
                 vehicle.color = (0, 255, 0)
+                # vehicle.time_out_collision = self.sim.t
+
 
             # # find the lead car
             lead = self.find_lead(vehicle)
@@ -113,42 +152,40 @@ class VehiclePool:
 
                 # green or no signal
                 if signal_state:
-
                     #detect buffer is full
-                    counter = 0
-                    for buffered_vehicle in self.vehicles_in_buffer:
-                        if buffered_vehicle.path['roads'][0] == vehicle.path['roads'][0]:
-                            counter = counter + 1
-                    # if (counter > 6):
-                    #     vehicle.slow(0.1 * vehicle._v_max)
-                    # elif (counter < 6):
-                    #     vehicle.slow(0.5 * vehicle._v_max)
-                    if (counter > 4) & (vehicle.current_road_index==0):
-                        vehicle.slow(0.1 * vehicle._v_max)
-                    elif (counter < 4) & (vehicle.current_road_index==0):
-                        vehicle.slow(0.5 * vehicle._v_max)
-                    else:
-                        vehicle.unslow()
-                        vehicle.unstop()
-                    counter = 0
-                    if vehicle in self.vehicles_in_buffer:
+                    if vehicle.current_road_index == 0:
+                        counter = 0
+                        for buffered_vehicle in self.vehicles_in_buffer:
+                            if buffered_vehicle.path['roads'][0] == vehicle.path['roads'][0]:
+                                counter = counter + 1
+                        if (counter >= 4) & (vehicle.current_road_index == 0):
+                            vehicle.slow(0.1 * vehicle._v_max)
+                        elif (counter < 4) & (vehicle.current_road_index == 0):
+                            vehicle.slow(0.4 * vehicle._v_max)
+                        else:
+                            vehicle.unslow()
+                            vehicle.unstop()
+                    elif vehicle in self.vehicles_in_buffer:
                         vehicle_index = self.vehicles_in_buffer.index(vehicle)
-                        if (lead is None) & (vehicle_index == 0):
+                        if (vehicle_index == 0 and len(self.vehicles_in_collision) <= 1 and (self.sim.t - self.last_pass_time > 10)):
                             vehicle.unstop()
                             vehicle.unslow()
-                        elif (lead is None) & (vehicle_index == 1):
+                        elif (self.vehicles_in_buffer[0].stopped==True ) and (lead is None) and (vehicle.current_road_index>0) and (self.sim.t - self.last_pass_time > 10):
+                            self.vehicles_in_collision.append(vehicle)
+                            self.last_pass_time = self.sim.t
+                            # self.vehicles_in_buffer.remove(vehicle)
                             vehicle.unstop()
-                            t0 = self.vehicles_in_buffer[0].time_out_collision
-                            t1 = vehicle.time_reach_collision
-                            if t1 < t0:
-                                vehicle.slow(0.4 * vehicle._v_max)
-                            else:
-                                vehicle.unslow()
+                            vehicle.unslow()
                         else:
                             vehicle.slow(0.4 * vehicle._v_max)
-                    if vehicle in self.vehicles_in_collision:
+
+                    elif (vehicle.already_in_collision == True) or (vehicle.already_out_collision == True):
                         vehicle.unstop()
                         vehicle.unslow()
+                    else:
+                        #bug
+                        vehicle.slow(0.4 * vehicle._v_max)
+                        # print('wrong state')
                 else:
                     if lead is None:
                         if vehicle.x >= road.length - road.traffic_signal.slow_distance:
@@ -156,6 +193,7 @@ class VehiclePool:
                             # vehicle.stop()
                         if road.length - road.traffic_signal.stop_distance <= vehicle.x <= road.length - road.traffic_signal.stop_distance / 2:
                             vehicle.stop()
+
             else:
                 if lead is None:
                     vehicle.unstop()

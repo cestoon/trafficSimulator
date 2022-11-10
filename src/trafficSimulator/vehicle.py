@@ -27,6 +27,8 @@ class Vehicle:
 
         self.path = []
         self.current_road_index = 0
+        self.priority = 999
+        self.from_which_direction =''
 
         self.x = 0
         self.v = self.v_max
@@ -37,8 +39,8 @@ class Vehicle:
         self.is_in_buffer = False
         self.is_in_collision = False
         self.time_reach_buffer = 0
-        self.time_reach_collision = 0
-        self.time_out_collision = 0
+        self.time_reach_collision = 55555555
+        self.time_out_collision = 999999999
         self.already_out_collision = False
 
     def init_properties(self):
@@ -46,6 +48,15 @@ class Vehicle:
         self._v_max = self.v_max
 
     def update(self, lead, dt):
+        if self.path['roads'][0] == 0:
+            self.from_which_direction = 'WEST'
+        elif self.path['roads'][0] == 1:
+            self.from_which_direction = 'SOUTH'
+        elif self.path['roads'][0] == 2:
+            self.from_which_direction = 'EAST'
+        elif self.path['roads'][0] == 3:
+            self.from_which_direction = 'NORTH'
+
         #update is_in_buffer
         if self.current_road_index == 1:
             self.is_in_buffer = True
