@@ -25,6 +25,12 @@ class Simulation:
         self.roads = []  # Array to store roads
         self.generators = []
         self.traffic_signals = []
+        self.waittime = 0
+        self.besttime=0
+        self.crashtime = 0
+        self.throughput =0
+        self.currentusage=0
+        self.passingcars=0
 
     def create_road(self, start, end, road_count):
         road = Road(start, end, road_count)

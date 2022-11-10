@@ -4,6 +4,7 @@ from numpy.random import randint
 
 class VehiclePool:
     def __init__(self, sim):
+        self.inroadtime = 0
         self.sim = sim
         self.vehicle_pool_list = []
         self.vehicles_in_buffer =[]
@@ -55,12 +56,24 @@ class VehiclePool:
             if vehicle.x >= road.length:
                 # If vehicle has a next road
                 if vehicle.current_road_index + 1 < len(vehicle.path['roads']):
+                    if vehicle.current_road_index == 0:
+                        vehicle.inroadtime=self.sim.t
                     # Add it to the next road
                     vehicle.current_road_index += 1
                     vehicle.road_id = vehicle.path['roads'][vehicle.current_road_index]
+                    if vehicle.current_road_index == (len(vehicle.path['roads'])-1):
+                        self.sim.throughput += 1
                     vehicle.x = 0
                 else:
                     self.vehicle_pool_list.remove(vehicle)
+                    vehicle.outroadtime=self.sim.t
+                    self.sim.currentusage = (vehicle.outroadtime - vehicle.inroadtime)
+                    self.sim.waittime+=self.sim.currentusage
+                    if self.sim.besttime==0:
+                        self.sim.besttime = self.sim.currentusage
+                    if self.sim.currentusage<=self.sim.besttime:
+                        self.sim.besttime=self.sim.currentusage
+                    self.sim.passingcars+=1
 
             # update vehicles_in_buffer
             if (vehicle.already_in_buffer==False) & (vehicle.is_in_buffer == True):

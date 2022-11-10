@@ -22,7 +22,8 @@ class Vehicle:
         self.b_max = 5
         self.color = (0,255,0)
         # self.position = position
-
+        self.inroadtime = 0
+        self.outroadtime = 0
 
         self.path = []
         self.current_road_index = 0

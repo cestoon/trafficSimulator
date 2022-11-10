@@ -342,6 +342,20 @@ class Window:
                 for vehicle in road.vehicles:
                     self.draw_vehicle(vehicle, road)
 
+    def draw_summary(self):
+        text_wait = self.text_font.render(f'Average Waiting Time={(self.sim.waittime-self.sim.besttime*self.sim.passingcars)}', False, (0, 0, 0))
+        text_crash = self.text_font.render(f'Crash={self.sim.crashtime}', False, (0, 0, 0))
+        text_throughput = self.text_font.render(f'Throughput={self.sim.throughput}', False, (0, 0, 0))
+        text_besttime = self.text_font.render(f'Best Passing Time={self.sim.besttime}', False, (0, 0, 0))
+        text_lasttime = self.text_font.render(f'Last Passing Time={self.sim.currentusage}', False, (0, 0, 0))
+        text_passingeff=self.text_font.render(f'Passing Rate={(round(self.sim.throughput / (self.sim.t+0.001) * 60))}Per Minute', False, (0, 0, 0))
+        self.screen.blit(text_wait, (1000,0 ))
+        self.screen.blit(text_crash, (1000, 20))
+        self.screen.blit(text_throughput, (1000, 40))
+        self.screen.blit(text_besttime, (1000, 60))
+        self.screen.blit(text_lasttime, (1000, 80))
+        self.screen.blit(text_passingeff, (1000, 100))
+
     def draw_signals(self):
         for signal in self.sim.traffic_signals:
             for i in range(len(signal.roads)):
@@ -419,3 +433,4 @@ class Window:
         self.draw_smart_2lane_button()
         self.draw_smart_4lane_button()
         self.draw_round_button()
+        self.draw_summary()
