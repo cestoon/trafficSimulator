@@ -8,7 +8,7 @@ def traffic_light_4lane():
     n = 15
     a = 2
     b = 12
-    l = 300
+    l = 50
 
     # Nodes
     WEST_RIGHT_START = (-b - l, a)

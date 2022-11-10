@@ -1,6 +1,8 @@
 import numpy as np
 import pygame
 from src.trafficSimulator.button import traffic_flow_button, vehicle_velocity_button, scene_light_2lane_button, scence_round_button, scence_light_4lane_button, scence_smart_4lane_button,scence_smart_2lane_button
+from src.trafficSimulator import Simulation, TURN_LEFT, TURN_RIGHT, turn_road, curve_road
+# from vehicle_pool import VehiclePool
 from pygame import gfxdraw
 import os
 from src.examples.roundabout import round_about
@@ -212,7 +214,7 @@ class Window:
 
         self.polygon(vertices, color, filled=filled)
 
-    def rotated_rect(self, pos, size, angle=None, cos=None, sin=None, centered=True, color=(0, 0, 255)):
+    def rotated_rect(self, pos, size, angle=None, cos=None, sin=None, centered=True, color=(0, 0, 250)):
         self.rotated_box(pos, size, angle=angle, cos=cos, sin=sin, centered=centered, color=color, filled=False)
 
     def arrow(self, pos, size, angle=None, cos=None, sin=None, color=(150, 150, 190)):
@@ -328,7 +330,7 @@ class Window:
         x = road.start[0] + cos * vehicle.x
         y = road.start[1] + sin * vehicle.x
 
-        self.rotated_box((x, y), (l, h), cos=cos, sin=sin, centered=True)
+        self.rotated_box((x, y), (l, h), cos=cos, sin=sin, centered=True, color=vehicle.color)
 
     def draw_vehicles(self):
         if len(self.sim.paths) > 0:
