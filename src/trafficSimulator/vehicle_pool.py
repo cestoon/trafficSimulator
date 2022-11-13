@@ -139,6 +139,7 @@ class VehiclePool:
                 vehicle.already_in_collision = False
                 vehicle.already_out_collision = True
                 vehicle.color = (0, 255, 0)
+                self.total_jerk += abs(vehicle.jerk)
                 # vehicle.time_out_collision = self.sim.t
 
 
@@ -223,3 +224,12 @@ class VehiclePool:
         for vehicle in self.vehicle_pool_list:
             self.total_co2 = self.total_co2 + vehicle.co2em
             last = vehicle.jerk
+        # i = 0
+        # for i in range(len(self.vehicle_pool_list)-1):
+        #     t = self.vehicle_pool_list[i].jerk
+        #     if self.vehicle_pool_list[i+1].jerk > self.vehicle_pool_list[i].jerk:
+        #         self.total_jerk += self.vehicle_pool_list[i+1].jerk
+
+
+
+

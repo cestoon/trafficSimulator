@@ -34,6 +34,7 @@ class Vehicle:
         self.current_road_index = 0
         self.priority = 999
         self.from_which_direction =''
+        self.jerk_every_time = 0
 
         self.rollingRes = 0.018  # wheelonroad
         self.engineEff = 0.35  # fuel2force
@@ -83,6 +84,7 @@ class Vehicle:
         a0 = self.a
         # Update position and velocity
         self.lastp = self.x
+        self.lastjerk = self.jerk_every_time
         if self.v + self.a * dt < 0:
             self.x -= 1 / 2 * self.v * self.v / self.a
             self.v = 0
@@ -101,7 +103,10 @@ class Vehicle:
         if self.stopped:
             self.a = -self.b_max * self.v / self.v_max
 
-        self.jerk = (self.a - a0) / dt
+        self.jerk_every_time = (self.a - a0) / dt
+
+        if self.jerk_every_time > self.lastjerk:
+            self.jerk = self.jerk_every_time
 
         self.co2em1 = 0
         self.co2em2 = 0
