@@ -19,6 +19,7 @@ class VehiclePool:
         self.vehicle_count = 0
         self.v_max = 8
         self.total_co2 = 0
+        self.total_jerk = 0
         # self.postion = []
 
 
@@ -221,3 +222,4 @@ class VehiclePool:
                     vehicle.unslow()
         for vehicle in self.vehicle_pool_list:
             self.total_co2 = self.total_co2 + vehicle.co2em
+            last = vehicle.jerk

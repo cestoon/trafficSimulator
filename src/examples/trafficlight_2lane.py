@@ -219,3 +219,5 @@ if __name__ == '__main__':
     win.zoom = 10
     win.run(steps_per_update=10)
 
+    win2 = Window()
+

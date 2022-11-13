@@ -28,6 +28,7 @@ class Vehicle:
         self.co2em2=0
         self.co2em = 0
         self.lastp=0
+        self.jerk = 0
 
         self.path = []
         self.current_road_index = 0
@@ -79,7 +80,7 @@ class Vehicle:
         else:
             self.is_in_collision = False
 
-
+        a0 = self.a
         # Update position and velocity
         self.lastp = self.x
         if self.v + self.a * dt < 0:
@@ -100,7 +101,7 @@ class Vehicle:
         if self.stopped:
             self.a = -self.b_max * self.v / self.v_max
 
-        # self.total_x = self.total_x + self.x
+        self.jerk = (self.a - a0) / dt
 
         self.co2em1 = 0
         self.co2em2 = 0

@@ -3,9 +3,13 @@ from copy import deepcopy
 from .vehicle_generator import VehicleGenerator
 from .traffic_signal import TrafficSignal
 from .vehicle_pool import VehiclePool
+from .vehicle import Vehicle
+from matplotlib import pyplot as plt
+import numpy as np
 
 
 class Simulation:
+
     def __init__(self, a=2):
         # Set default configuration
         self.vehicle_pool = VehiclePool(self)
@@ -13,7 +17,8 @@ class Simulation:
         self.paths = []
         self.a=a
         self.have_traffic_signal = False
-
+        self.waittime = 0
+        self.throughput = 0
 
     def set_default_config(self):
         self.t = 0.0  # Time keeping

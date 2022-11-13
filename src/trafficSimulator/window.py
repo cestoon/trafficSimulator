@@ -1,15 +1,14 @@
 import numpy as np
 import pygame
-from src.trafficSimulator.button import traffic_flow_button, vehicle_velocity_button, scene_light_2lane_button, scence_round_button, scence_light_4lane_button, scence_smart_4lane_button,scence_smart_2lane_button
-from src.trafficSimulator import Simulation, TURN_LEFT, TURN_RIGHT, turn_road, curve_road
+from src.trafficSimulator.button import traffic_flow_button, vehicle_velocity_button, scene_light_2lane_button,scence_smart_2lane_button
 # from vehicle_pool import VehiclePool
 from pygame import gfxdraw
 import os
-from src.examples.roundabout import round_about
 from src.examples.smart_2lane import smart_2lane
-from src.examples.smart_4lane import smart_4lane
 from src.examples.trafficlight_2lane import traffic_light_2lane
-from src.examples.trafficlight_4lane import traffic_light_4lane
+from matplotlib import pyplot as plt
+
+
 
 
 class Window:
@@ -43,10 +42,6 @@ class Window:
         self.vehicle_velocity_button = vehicle_velocity_button.Button(0, 40, self.plus_img, self.minus_img, 0.01, 0.01)
         self.light_2lane_button = scene_light_2lane_button.Button(100, 60, self.light_2lane_img, 0.4)
         self.smart_2lane_button = scence_smart_2lane_button.Button(100, 110, self.smart_2lane_img, 0.4)
-        self.light_4lane_button = scence_light_4lane_button.Button(100, 160, self.light_4lane_img, 0.4)
-        self.smart_4lane_button = scence_smart_4lane_button.Button(100, 210, self.smart_4lane_img, 0.4)
-        self.round_button = scence_round_button.Button(100, 260, self.round_img, 0.4)
-        # Simulation to draw
 
         # Simulation to draw
 
@@ -95,6 +90,7 @@ class Window:
 
             # Draw simulation
             self.draw()
+
 
             # Update window
             pygame.display.update()
@@ -286,15 +282,7 @@ class Window:
                 color=(180, 180, 220),
                 centered=False
             )
-            # Draw road lines
-            # self.rotated_box(
-            #     road.start,
-            #     (road.length, 0.25),
-            #     cos=road.angle_cos,
-            #     sin=road.angle_sin,
-            #     color=(0, 0, 0),
-            #     centered=False
-            # )
+
 
             # Draw road arrow
             if road.length > 5:
@@ -351,12 +339,14 @@ class Window:
         text_besttime = self.text_font.render(f'Best Passing Time={self.sim.besttime}', False, (0, 0, 0))
         text_lasttime = self.text_font.render(f'Last Passing Time={self.sim.currentusage}', False, (0, 0, 0))
         text_passingeff=self.text_font.render(f'Passing Rate={(round(self.sim.throughput / (self.sim.t+0.001) * 60))}Per Minute', False, (0, 0, 0))
+        text_jerk=self.text_font.render(f'jerk={(self.sim.vehicle_pool.total_jerk)/(self.sim.throughput + 1)}', False, (0, 0, 0))
         self.screen.blit(text_wait, (1000,0 ))
         self.screen.blit(text_crash, (1000, 20))
         self.screen.blit(text_throughput, (1000, 40))
         self.screen.blit(text_besttime, (1000, 60))
         self.screen.blit(text_lasttime, (1000, 80))
         self.screen.blit(text_passingeff, (1000, 100))
+        self.screen.blit(text_jerk, (1000, 120))
 
     def draw_signals(self):
         for signal in self.sim.traffic_signals:
@@ -399,17 +389,14 @@ class Window:
         if self.smart_2lane_button.draw(self.screen, self.sim, self.text_font):
             self.sim = smart_2lane()
 
-    def draw_smart_4lane_button(self):
-        if self.smart_4lane_button.draw(self.screen, self.sim, self.text_font):
-            self.sim = smart_4lane()
-
-    def draw_light_4lane_button(self):
-        if self.light_4lane_button.draw(self.screen, self.sim, self.text_font):
-            self.sim = traffic_light_4lane()
-
-    def draw_round_button(self):
-        if self.round_button.draw(self.screen, self.sim, self.text_font):
-            self.sim = round_about()
+    def draw_graph(self):
+        x = np.arange(1, 11)
+        y = 2 * x + 5
+        plt.title("Matplotlib demo")
+        plt.xlabel("x axis caption")
+        plt.ylabel("y axis caption")
+        plt.plot(x, y)
+        plt.show()
 
     def draw(self):
         # Fill background
@@ -417,7 +404,8 @@ class Window:
         self.draw_roads()
         self.draw_vehicles()
         self.draw_signals()
-        # self.count_co2()
+
+    # def draw2(self):
         # Draw status info
         self.draw_status()
 
@@ -425,7 +413,6 @@ class Window:
         self.draw_traffic_flow_button()
         self.draw_vehicle_velocity_button()
         self.draw_light_2lane_button()
-        # self.draw_light_4lane_button()
         self.draw_smart_2lane_button()
-        # self.draw_smart_4lane_button()
         self.draw_summary()
+        # self.draw_graph()
