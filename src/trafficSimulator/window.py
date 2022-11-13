@@ -81,6 +81,9 @@ class Window:
         pygame.font.init()
         self.text_font = pygame.font.SysFont('Lucida Console', 16)
 
+        through_set = set()
+        co2_set = []
+        n = len(through_set)
         # Draw loop
         running = True
         while running:
@@ -90,7 +93,15 @@ class Window:
 
             # Draw simulation
             self.draw()
-
+            # print(self.throughput)
+            if self.sim.throughput % 100 == 0 and self.sim.throughput != 0:
+                n = len(through_set)
+                through_set.add(self.sim.throughput)
+                m = len(through_set)
+                if m > n:
+                    print(self.sim.throughput)
+                    print('-----------')
+                    co2_set.append((self.sim.throughput, self.sim.vehicle_pool.total_co2))
 
             # Update window
             pygame.display.update()
@@ -101,6 +112,8 @@ class Window:
                 # Quit program if window is closed
                 if event.type == pygame.QUIT:
                     running = False
+                    print('?????????')
+                    print(co2_set)
                 # Handle mouse events
                 elif event.type == pygame.MOUSEBUTTONDOWN:
                     # If mouse button down
@@ -340,7 +353,7 @@ class Window:
         text_lasttime = self.text_font.render(f'Last Passing Time={self.sim.currentusage}', False, (0, 0, 0))
         text_passingeff=self.text_font.render(f'Passing Rate={(round(self.sim.throughput / (self.sim.t+0.001) * 60))}Per Minute', False, (0, 0, 0))
         text_jerk=self.text_font.render(f'jerk={(self.sim.vehicle_pool.total_jerk)/(self.sim.throughput + 1)}', False, (0, 0, 0))
-        self.screen.blit(text_wait, (1000,0 ))
+        self.screen.blit(text_wait, (1000,0))
         self.screen.blit(text_crash, (1000, 20))
         self.screen.blit(text_throughput, (1000, 40))
         self.screen.blit(text_besttime, (1000, 60))

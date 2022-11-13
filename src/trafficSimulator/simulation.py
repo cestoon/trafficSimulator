@@ -61,8 +61,6 @@ class Simulation:
         return sig
 
     def update(self):
-
-
         for signal in self.traffic_signals:
             signal.update(self)
 
