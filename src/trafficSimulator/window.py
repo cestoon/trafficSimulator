@@ -54,6 +54,9 @@ class Window:
         for attr, val in config.items():
             setattr(self, attr, val)
 
+
+
+
     def set_default_config(self):
         """Set default configuration"""
         self.width = 1400
@@ -340,6 +343,8 @@ class Window:
         text_lasttime = self.text_font.render(f'Last Passing Time={self.sim.currentusage}', False, (0, 0, 0))
         text_passingeff=self.text_font.render(f'Passing Rate={(round(self.sim.throughput / (self.sim.t+0.001) * 60))}Per Minute', False, (0, 0, 0))
         text_jerk=self.text_font.render(f'jerk={(self.sim.vehicle_pool.total_jerk)/(self.sim.throughput + 1)}', False, (0, 0, 0))
+        text_final_jerk=self.text_font.render(f'fianl_jerk={self.sim.vehicle_pool.final_jerk}', False, (0, 0, 0))
+
         self.screen.blit(text_wait, (1000,0 ))
         self.screen.blit(text_crash, (1000, 20))
         self.screen.blit(text_throughput, (1000, 40))
@@ -347,6 +352,7 @@ class Window:
         self.screen.blit(text_lasttime, (1000, 80))
         self.screen.blit(text_passingeff, (1000, 100))
         self.screen.blit(text_jerk, (1000, 120))
+        self.screen.blit(text_final_jerk, (1000, 140))
 
     def draw_signals(self):
         for signal in self.sim.traffic_signals:
@@ -375,6 +381,7 @@ class Window:
         # to draw buttons
         if self.traffic_flow_button.draw(self.screen, self.sim.vehicle_pool, self.text_font):
             print('flow')
+
 
     def draw_vehicle_velocity_button(self):
         # to draw buttons

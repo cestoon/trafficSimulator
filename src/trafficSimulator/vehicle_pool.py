@@ -20,6 +20,7 @@ class VehiclePool:
         self.v_max = 8
         self.total_co2 = 0
         self.total_jerk = 0
+        self.final_jerk = 0
         # self.postion = []
 
 

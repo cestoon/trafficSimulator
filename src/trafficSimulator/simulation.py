@@ -62,7 +62,6 @@ class Simulation:
 
     def update(self):
 
-
         for signal in self.traffic_signals:
             signal.update(self)
 
@@ -73,6 +72,8 @@ class Simulation:
         self.t += self.dt
         self.frame_count += 1
 
+        if 200 <= self.t <= 200 + self.dt:
+            self.vehicle_pool.final_jerk = self.vehicle_pool.total_jerk / self.throughput
     def run(self, steps):
         for _ in range(steps):
             self.update()
