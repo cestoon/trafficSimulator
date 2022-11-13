@@ -54,9 +54,6 @@ class Window:
         for attr, val in config.items():
             setattr(self, attr, val)
 
-
-
-
     def set_default_config(self):
         """Set default configuration"""
         self.width = 1400
@@ -84,6 +81,9 @@ class Window:
         pygame.font.init()
         self.text_font = pygame.font.SysFont('Lucida Console', 16)
 
+        through_set = set()
+        co2_set = []
+        n = len(through_set)
         # Draw loop
         running = True
         while running:
@@ -93,7 +93,14 @@ class Window:
 
             # Draw simulation
             self.draw()
-
+            # print(self.throughput)
+            if self.sim.throughput % 100 == 0 and self.sim.throughput != 0:
+                n = len(through_set)
+                through_set.add(self.sim.throughput)
+                m = len(through_set)
+                if m > n:
+                    print(self.sim.throughput)
+                    co2_set.append((self.sim.throughput, self.sim.vehicle_pool.total_co2))
 
             # Update window
             pygame.display.update()
@@ -104,6 +111,7 @@ class Window:
                 # Quit program if window is closed
                 if event.type == pygame.QUIT:
                     running = False
+                    print(co2_set)
                 # Handle mouse events
                 elif event.type == pygame.MOUSEBUTTONDOWN:
                     # If mouse button down
@@ -381,7 +389,6 @@ class Window:
         # to draw buttons
         if self.traffic_flow_button.draw(self.screen, self.sim.vehicle_pool, self.text_font):
             print('flow')
-
 
     def draw_vehicle_velocity_button(self):
         # to draw buttons
