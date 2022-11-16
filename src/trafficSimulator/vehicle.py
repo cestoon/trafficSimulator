@@ -45,6 +45,7 @@ class Vehicle:
         self.total_x = 0
         self.v = self.v_max
         self.a = 0
+        self.modulo_a = 0
         self.stopped = False
         self.already_in_buffer = False
         self.already_in_collision = False
@@ -54,6 +55,8 @@ class Vehicle:
         self.time_reach_collision = 55555555
         self.time_out_collision = 999999999
         self.already_out_collision = False
+
+        self.turing =0
 
     def init_properties(self):
         self.sqrt_ab = 2 * np.sqrt(self.a_max * self.b_max)
@@ -103,7 +106,12 @@ class Vehicle:
         if self.stopped:
             self.a = -self.b_max * self.v / self.v_max
 
-        self.jerk_every_time = (self.a - a0) / dt
+        if self.turing == 1:
+            self.jerk_every_time = np.sqrt(self.v*self.v*self.v*self.v/100 + self.a*self.a)
+        else:
+            self.jerk_every_time = abs(self.a)
+
+        # self.jerk_every_time = (self.a - a0) / dt
 
         if self.jerk_every_time > self.lastjerk:
             self.jerk = self.jerk_every_time

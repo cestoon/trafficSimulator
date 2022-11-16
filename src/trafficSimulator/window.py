@@ -316,6 +316,12 @@ class Window:
         l, h = vehicle.l, 2
         sin, cos = road.angle_sin, road.angle_cos
 
+        #judge turing
+        if ~((sin==0 or sin==1) and (cos == 1 or cos==0)):
+            vehicle.turing = 1
+        else:
+            vehicle.turing = 0
+
         x = road.start[0] + cos * vehicle.x
         y = road.start[1] + sin * vehicle.x
 
@@ -345,11 +351,11 @@ class Window:
     def draw_summary(self):
 
         text_wait = self.text_font.render(f'Average Waiting Time={(self.sim.waittime/(self.sim.passingcars+1))}', False, (0, 0, 0))
-        text_crash = self.text_font.render(f'CO2 Emission={self.sim.vehicle_pool.total_co2}', False, (0, 0, 0))
+        text_crash = self.text_font.render(f'CO2 Emission={round(self.sim.vehicle_pool.total_co2,2)}KG', False, (0, 0, 0))
         text_throughput = self.text_font.render(f'Throughput={self.sim.throughput}', False, (0, 0, 0))
         text_besttime = self.text_font.render(f'Best Passing Time={self.sim.besttime}', False, (0, 0, 0))
         text_lasttime = self.text_font.render(f'Last Passing Time={self.sim.currentusage}', False, (0, 0, 0))
-        text_passingeff=self.text_font.render(f'Passing Rate={(round(self.sim.throughput / (self.sim.t+0.001) * 60))}Per Minute', False, (0, 0, 0))
+        text_passingeff=self.text_font.render(f'Passing Rate={(round(self.sim.throughput / (self.sim.t+0.001) * 60,2))}Per Minute', False, (0, 0, 0))
         text_jerk=self.text_font.render(f'jerk={(self.sim.vehicle_pool.total_jerk)/(self.sim.throughput + 1)}', False, (0, 0, 0))
         text_final_jerk=self.text_font.render(f'fianl_jerk={self.sim.vehicle_pool.final_jerk}', False, (0, 0, 0))
 
