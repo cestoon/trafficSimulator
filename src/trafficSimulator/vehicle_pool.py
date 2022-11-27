@@ -17,10 +17,11 @@ class VehiclePool:
         self.last_pass_time = 0
         self.vehicle_rate = 30
         self.vehicle_count = 0
-        self.v_max = 8
+        self.v_max = 7
         self.total_co2 = 0
         self.total_jerk = 0
         self.final_jerk = 0
+        self.v_realspeed=self.v_max*5
         # self.postion = []
 
 
@@ -135,12 +136,12 @@ class VehiclePool:
                 self.vehicles_in_collision.append(vehicle)
                 vehicle.already_in_collision = True
                 self.last_pass_time = self.sim.t
+                self.total_jerk += abs(vehicle.jerk)
             elif (vehicle.already_in_collision == True) & (vehicle.is_in_collision == False):
                 self.vehicles_in_collision.remove(vehicle)
                 vehicle.already_in_collision = False
                 vehicle.already_out_collision = True
                 vehicle.color = (0, 255, 0)
-                self.total_jerk += abs(vehicle.jerk)
                 # vehicle.time_out_collision = self.sim.t
 
 

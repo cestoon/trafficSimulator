@@ -36,6 +36,12 @@ class Simulation:
         self.throughput =0
         self.currentusage=0
         self.passingcars=0
+        self.co2em=0 #kg
+        self.rollingRes=0.018 #wheelonroad
+        self.engineEff=0.35 #fuel2force
+        self.oil2co2=0.785 #kg/L
+        self.fuelheat=9.3278 #L/kWh
+
 
     def create_road(self, start, end, road_count):
         road = Road(start, end, road_count)

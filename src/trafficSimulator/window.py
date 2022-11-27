@@ -85,6 +85,9 @@ class Window:
         pygame.font.init()
         self.text_font = pygame.font.SysFont('Lucida Console', 16)
 
+        through_set = set()
+        co2_set = []
+        n = len(through_set)
         # Draw loop
         running = True
         while running:
@@ -94,7 +97,14 @@ class Window:
 
             # Draw simulation
             self.draw()
-
+            # print(self.throughput)
+            if self.sim.throughput % 100 == 0 and self.sim.throughput != 0:
+                n = len(through_set)
+                through_set.add(self.sim.throughput)
+                m = len(through_set)
+                if m > n:
+                    print(self.sim.throughput)
+                    co2_set.append((self.sim.throughput, self.sim.vehicle_pool.total_co2))
 
             # Update window
             pygame.display.update()
@@ -105,6 +115,7 @@ class Window:
                 # Quit program if window is closed
                 if event.type == pygame.QUIT:
                     running = False
+                    print(co2_set)
                 # Handle mouse events
                 elif event.type == pygame.MOUSEBUTTONDOWN:
                     # If mouse button down
@@ -309,6 +320,12 @@ class Window:
         l, h = vehicle.l, 2
         sin, cos = road.angle_sin, road.angle_cos
 
+        #judge turing
+        if ~((sin==0 or sin==1) and (cos == 1 or cos==0)):
+            vehicle.turing = 1
+        else:
+            vehicle.turing = 0
+
         x = road.start[0] + cos * vehicle.x
         y = road.start[1] + sin * vehicle.x
 
@@ -338,15 +355,13 @@ class Window:
     def draw_summary(self):
 
         text_wait = self.text_font.render(f'Average Waiting Time={(self.sim.waittime/(self.sim.passingcars+1))}', False, (0, 0, 0))
-        text_crash = self.text_font.render(f'CO2 Emission={self.sim.vehicle_pool.total_co2}g', False, (0, 0, 0))
+        text_crash = self.text_font.render(f'CO2 Emission={round(self.sim.vehicle_pool.total_co2,2)}KG', False, (0, 0, 0))
         text_throughput = self.text_font.render(f'Throughput={self.sim.throughput}', False, (0, 0, 0))
         text_besttime = self.text_font.render(f'Best Passing Time={self.sim.besttime}', False, (0, 0, 0))
         text_lasttime = self.text_font.render(f'Last Passing Time={self.sim.currentusage}', False, (0, 0, 0))
-        text_passingeff=self.text_font.render(f'Passing Rate={(round(self.sim.throughput / (self.sim.t+0.001) * 60))}Per Minute', False, (0, 0, 0))
-        # text_jerk=self.text_font.render(f'jerk={(self.sim.vehicle_pool.total_jerk)/(self.sim.throughput + 1)}', False, (0, 0, 0))
-        # text_final_jerk=self.text_font.render(f'fianl_jerk={self.sim.final_jerk / 100}', False, (0, 0, 0))
-        # text_final_co2 = self.text_font.render(f'fianl_co2={self.sim.final_co2}', False, (0, 0, 0))
-        # text_final_waittime = self.text_font.render(f'fianl_waittime={self.sim.final_waittime}', False, (0, 0, 0))
+        text_passingeff=self.text_font.render(f'Passing Rate={(round(self.sim.throughput / (self.sim.t+0.001) * 60,2))}Per Minute', False, (0, 0, 0))
+        text_jerk=self.text_font.render(f'jerk={(self.sim.vehicle_pool.total_jerk)/(self.sim.throughput + 1)}', False, (0, 0, 0))
+        text_final_jerk=self.text_font.render(f'fianl_jerk={self.sim.vehicle_pool.final_jerk}', False, (0, 0, 0))
 
         self.screen.blit(text_wait, (1000,0 ))
         self.screen.blit(text_crash, (1000, 20))
@@ -354,10 +369,8 @@ class Window:
         self.screen.blit(text_besttime, (1000, 60))
         self.screen.blit(text_lasttime, (1000, 80))
         self.screen.blit(text_passingeff, (1000, 100))
-        # self.screen.blit(text_jerk, (1000, 120))
-        # self.screen.blit(text_final_jerk, (1000, 140))
-        # self.screen.blit(text_final_co2, (1000, 160))
-        # self.screen.blit(text_final_waittime, (1000, 180))
+        self.screen.blit(text_jerk, (1000, 120))
+        self.screen.blit(text_final_jerk, (1000, 140))
 
     def draw_signals(self):
         for signal in self.sim.traffic_signals:
@@ -396,6 +409,7 @@ class Window:
         # to draw buttons
         if self.traffic_flow_button.draw(self.screen, self.sim.vehicle_pool, self.text_font):
             print('flow')
+
 
     def draw_vehicle_velocity_button(self):
         # to draw buttons
