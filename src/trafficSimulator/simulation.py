@@ -19,6 +19,9 @@ class Simulation:
         self.have_traffic_signal = False
         self.waittime = 0
         self.throughput = 0
+        self.final_waittime = 0
+        self.final_jerk = 0
+        self.final_co2 = 0
 
     def set_default_config(self):
         self.t = 0.0  # Time keeping
@@ -72,8 +75,13 @@ class Simulation:
         self.t += self.dt
         self.frame_count += 1
 
-        if 200 <= self.t <= 200 + self.dt:
-            self.vehicle_pool.final_jerk = self.vehicle_pool.total_jerk / self.throughput
+        # if 200 <= self.t <= 200 + self.dt:
+        #     self.final_waittime = self.waittime/self.throughput
+
+        if self.throughput == 100:
+            self.final_waittime = self.waittime / (self.passingcars + 1)
+            self.final_jerk = self.vehicle_pool.total_jerk
+            self.final_co2 = self.vehicle_pool.total_co2
     def run(self, steps):
         for _ in range(steps):
             self.update()

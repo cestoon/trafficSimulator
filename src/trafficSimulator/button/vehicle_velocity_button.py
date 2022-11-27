@@ -47,7 +47,7 @@ class Button():
         surface.blit(self.minus_image, (self.minus_rect.x, self.minus_rect.y))
 
         # To draw text
-        text_fps = text_font.render(f'max_velocity={vehicle_pool.v_max}', False, (0, 0, 0))
+        text_fps = text_font.render(f'max_velocity={vehicle_pool.v_max*5}km/h', False, (0, 0, 0))
         surface.blit(text_fps, (self.plus_rect.x - 190, self.plus_rect.y))
 
         return action

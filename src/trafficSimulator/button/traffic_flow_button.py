@@ -25,7 +25,7 @@ class Button():
             if pygame.mouse.get_pressed()[0] == 1 and self.plus_clicked == False:
                 self.plus_clicked = True
                 action = True
-                vehicle_pool.vehicle_rate += 10
+                vehicle_pool.vehicle_rate += 1
                 #generator.vehicle_rate += 10
                 print('increase 10')
 
@@ -36,7 +36,7 @@ class Button():
             if pygame.mouse.get_pressed()[0] == 1 and self.minus_clicked == False:
                 self.minus_clicked = True
                 action = True
-                vehicle_pool.vehicle_rate -= 10
+                vehicle_pool.vehicle_rate -= 1
                 # generator.vehicle_rate -= 10
                 print('decrease 10')
 

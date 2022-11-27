@@ -1,11 +1,13 @@
 import numpy as np
 import pygame
-from src.trafficSimulator.button import traffic_flow_button, vehicle_velocity_button, scene_light_2lane_button,scence_smart_2lane_button
+from src.trafficSimulator.button import traffic_flow_button, unbalance_smart, unbalance_traffic,vehicle_velocity_button, scene_light_2lane_button,scence_smart_2lane_button
 # from vehicle_pool import VehiclePool
 from pygame import gfxdraw
 import os
 from src.examples.smart_2lane import smart_2lane
 from src.examples.trafficlight_2lane import traffic_light_2lane
+from src.examples.smart_unbalance import smart_2lane_unbalance
+from src.examples.traffic_unbalance import traffic_light_2lane_unbalance
 from matplotlib import pyplot as plt
 
 
@@ -24,25 +26,24 @@ class Window:
         plus_btn_path = os.path.join(sourceFileDir, './button/plus_btn.png')
         minus_btn_path = os.path.join(sourceFileDir, './button/minus_btn.png')
         light_2lane_btn_path = os.path.join(sourceFileDir, 'button/traffic2lanes.jpg')
-        light_4lane_btn_path = os.path.join(sourceFileDir, 'button/traffic4lanes.jpg')
         smart_2lane_btn_path = os.path.join(sourceFileDir, 'button/smart2lanes.jpg')
-        smart_4lane_btn_path = os.path.join(sourceFileDir, 'button/smart4lanes.jpg')
-        smart_round_btn_path = os.path.join(sourceFileDir, 'button/roundroad.jpg')
+        unbalance_smart_path = os.path.join(sourceFileDir, 'button/unbalance_smart.jpg')
+        unbalance_traffic_path = os.path.join(sourceFileDir, 'button/unbalance_traffic.jpg')
 
         self.plus_img = pygame.image.load(plus_btn_path)
         self.minus_img = pygame.image.load(minus_btn_path)
         self.light_2lane_img = pygame.image.load(light_2lane_btn_path)
-        self.light_4lane_img = pygame.image.load(light_4lane_btn_path)
         self.smart_2lane_img = pygame.image.load(smart_2lane_btn_path)
-        self.smart_4lane_img = pygame.image.load(smart_4lane_btn_path)
-        self.round_img = pygame.image.load(smart_round_btn_path)
+        self.unbalance_smart_img = pygame.image.load(unbalance_smart_path)
+        self.unbalance_traffic_img = pygame.image.load(unbalance_traffic_path)
 
         # create button instances
         self.traffic_flow_button = traffic_flow_button.Button(0, 20, self.plus_img, self.minus_img, 0.01, 0.01)
         self.vehicle_velocity_button = vehicle_velocity_button.Button(0, 40, self.plus_img, self.minus_img, 0.01, 0.01)
-        self.light_2lane_button = scene_light_2lane_button.Button(100, 60, self.light_2lane_img, 0.4)
-        self.smart_2lane_button = scence_smart_2lane_button.Button(100, 110, self.smart_2lane_img, 0.4)
-
+        self.light_2lane_button = scene_light_2lane_button.Button(100, 60, self.light_2lane_img, 0.7)
+        self.smart_2lane_button = scence_smart_2lane_button.Button(100, 140, self.smart_2lane_img, 0.7)
+        self.unbalance_smart = unbalance_smart.Button(100, 220, self.unbalance_smart_img, 0.6)
+        self.unbalance_traffic = unbalance_traffic.Button(100, 300, self.unbalance_traffic_img, 0.6)
         # Simulation to draw
 
         self.sim = sim
@@ -337,13 +338,15 @@ class Window:
     def draw_summary(self):
 
         text_wait = self.text_font.render(f'Average Waiting Time={(self.sim.waittime/(self.sim.passingcars+1))}', False, (0, 0, 0))
-        text_crash = self.text_font.render(f'CO2 Emission={self.sim.vehicle_pool.total_co2}', False, (0, 0, 0))
+        text_crash = self.text_font.render(f'CO2 Emission={self.sim.vehicle_pool.total_co2}g', False, (0, 0, 0))
         text_throughput = self.text_font.render(f'Throughput={self.sim.throughput}', False, (0, 0, 0))
         text_besttime = self.text_font.render(f'Best Passing Time={self.sim.besttime}', False, (0, 0, 0))
         text_lasttime = self.text_font.render(f'Last Passing Time={self.sim.currentusage}', False, (0, 0, 0))
         text_passingeff=self.text_font.render(f'Passing Rate={(round(self.sim.throughput / (self.sim.t+0.001) * 60))}Per Minute', False, (0, 0, 0))
-        text_jerk=self.text_font.render(f'jerk={(self.sim.vehicle_pool.total_jerk)/(self.sim.throughput + 1)}', False, (0, 0, 0))
-        text_final_jerk=self.text_font.render(f'fianl_jerk={self.sim.vehicle_pool.final_jerk}', False, (0, 0, 0))
+        # text_jerk=self.text_font.render(f'jerk={(self.sim.vehicle_pool.total_jerk)/(self.sim.throughput + 1)}', False, (0, 0, 0))
+        # text_final_jerk=self.text_font.render(f'fianl_jerk={self.sim.final_jerk / 100}', False, (0, 0, 0))
+        # text_final_co2 = self.text_font.render(f'fianl_co2={self.sim.final_co2}', False, (0, 0, 0))
+        # text_final_waittime = self.text_font.render(f'fianl_waittime={self.sim.final_waittime}', False, (0, 0, 0))
 
         self.screen.blit(text_wait, (1000,0 ))
         self.screen.blit(text_crash, (1000, 20))
@@ -351,8 +354,10 @@ class Window:
         self.screen.blit(text_besttime, (1000, 60))
         self.screen.blit(text_lasttime, (1000, 80))
         self.screen.blit(text_passingeff, (1000, 100))
-        self.screen.blit(text_jerk, (1000, 120))
-        self.screen.blit(text_final_jerk, (1000, 140))
+        # self.screen.blit(text_jerk, (1000, 120))
+        # self.screen.blit(text_final_jerk, (1000, 140))
+        # self.screen.blit(text_final_co2, (1000, 160))
+        # self.screen.blit(text_final_waittime, (1000, 180))
 
     def draw_signals(self):
         for signal in self.sim.traffic_signals:
@@ -377,11 +382,20 @@ class Window:
         self.screen.blit(text_fps, (0, 0))
         self.screen.blit(text_frc, (100, 0))
 
+    def draw_weight_balance(self):
+        if self.unbalance_smart.draw(self.screen, self.sim, self.text_font):
+            self.sim = smart_2lane_unbalance()
+            #print('unbalance1')
+
+    def draw_weight_unbalance(self):
+        if self.unbalance_traffic.draw(self.screen, self.sim, self.text_font):
+            self.sim = traffic_light_2lane_unbalance()
+            #print('unbalance')
+
     def draw_traffic_flow_button(self):
         # to draw buttons
         if self.traffic_flow_button.draw(self.screen, self.sim.vehicle_pool, self.text_font):
             print('flow')
-
 
     def draw_vehicle_velocity_button(self):
         # to draw buttons
@@ -421,5 +435,7 @@ class Window:
         self.draw_vehicle_velocity_button()
         self.draw_light_2lane_button()
         self.draw_smart_2lane_button()
+        self.draw_weight_balance()
+        self.draw_weight_unbalance()
         self.draw_summary()
         # self.draw_graph()
