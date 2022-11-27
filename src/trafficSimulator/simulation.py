@@ -1,11 +1,6 @@
 from .road import Road
-from copy import deepcopy
-from .vehicle_generator import VehicleGenerator
 from .traffic_signal import TrafficSignal
 from .vehicle_pool import VehiclePool
-from .vehicle import Vehicle
-from matplotlib import pyplot as plt
-import numpy as np
 
 
 class Simulation:
@@ -15,7 +10,7 @@ class Simulation:
         self.vehicle_pool = VehiclePool(self)
         self.set_default_config()
         self.paths = []
-        self.a=a
+        self.a = a
         self.have_traffic_signal = False
         self.waittime = 0
         self.throughput = 0
@@ -31,17 +26,16 @@ class Simulation:
         self.generators = []
         self.traffic_signals = []
         self.waittime = 0
-        self.besttime=0
+        self.besttime = 0
         self.crashtime = 0
-        self.throughput =0
-        self.currentusage=0
-        self.passingcars=0
-        self.co2em=0 #kg
-        self.rollingRes=0.018 #wheelonroad
-        self.engineEff=0.35 #fuel2force
-        self.oil2co2=0.785 #kg/L
-        self.fuelheat=9.3278 #L/kWh
-
+        self.throughput = 0
+        self.currentusage = 0
+        self.passingcars = 0
+        self.co2em = 0  # kg
+        self.rollingRes = 0.018  # wheelonroad
+        self.engineEff = 0.35  # fuel2force
+        self.oil2co2 = 0.785  # kg/L
+        self.fuelheat = 9.3278  # L/kWh
 
     def create_road(self, start, end, road_count):
         road = Road(start, end, road_count)
@@ -53,8 +47,6 @@ class Simulation:
         for road in road_list:
             self.create_road(*road, road_count)
             road_count += 1
-
-
 
     def create_signal(self, roads, config={}):
         roads = [[self.roads[i] for i in road_group] for road_group in roads]
@@ -88,6 +80,7 @@ class Simulation:
             self.final_waittime = self.waittime / (self.passingcars + 1)
             self.final_jerk = self.vehicle_pool.total_jerk
             self.final_co2 = self.vehicle_pool.total_co2
+
     def run(self, steps):
         for _ in range(steps):
             self.update()

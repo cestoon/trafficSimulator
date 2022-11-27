@@ -108,8 +108,6 @@ def smart_2lane():
         *NORTH_RIGHT_TURN,
         *NORTH_LEFT_TURN
 
-
-
     ])
 
     def road(a): return range(a, a + n)
@@ -119,22 +117,22 @@ def smart_2lane():
             'id': 1,
             'weight': 3,
             'roads': [0, 12, 8, 6],
-            'collision_path' : [4,10,12,5,6,9],
+            'collision_path': [4, 10, 12, 5, 6, 9],
             # 'length' : [l,c,2*b,b+c+l]
         },
         {
             'id': 2,
             'weight': 1,
-            'roads': [0, 12,*road(16), 5],
+            'roads': [0, 12, *road(16), 5],
             'buffer_index': 1,
             'road_without_collision': [0, 1],
-            'collision_path': [10 ,9],
+            'collision_path': [10, 9],
             # 'length': [l, c, 0.8, b + c + l]
         },
         {
             'id': 3,
             'weight': 1,
-            'roads': [0, 12,*road(16 + n), 7],
+            'roads': [0, 12, *road(16 + n), 7],
             'collision_path': [4, 8, 6, 7]
         },
         {
@@ -143,7 +141,7 @@ def smart_2lane():
             'roads': [1, 13, 9, 7],
             'buffer_index': 1,
             'road_without_collision': [1, 13, 7],
-            'collision_path': [1,7,3,9,8,12],
+            'collision_path': [1, 7, 3, 9, 8, 12],
             'length': [l, c, 2 * b, b + c + l]
         },
         {
@@ -152,7 +150,7 @@ def smart_2lane():
             'roads': [1, 13, *road(16 + 2 * n), 6],
             'buffer': [13],
             'road_without_collision': [1, 13, 6],
-            'collision_path': [1,12]
+            'collision_path': [1, 12]
         },
         {
             'id': 6,
@@ -160,7 +158,7 @@ def smart_2lane():
             'roads': [1, 13, *road(16 + 3 * n), 4],
             'buffer': [13],
             'road_without_collision': [1, 13, 4],
-            'collision_path': [7,9,10,11]
+            'collision_path': [7, 9, 10, 11]
         },
         {
             'id': 7,
@@ -168,7 +166,7 @@ def smart_2lane():
             'roads': [2, 14, 10, 4],
             'buffer': [14],
             'road_without_collision': [2, 14, 4],
-            'collision_path': [4,10,6,11,12,3],
+            'collision_path': [4, 10, 6, 11, 12, 3],
             'length': [l, c, 2 * b, b + c + l]
 
         },
@@ -178,15 +176,15 @@ def smart_2lane():
             'roads': [2, 14, *road(16 + 4 * n), 7],
             'buffer': [14],
             'road_without_collision': [2, 14, 7],
-            'collision_path': [4,3]
+            'collision_path': [4, 3]
         },
         {
             'id': 9,
             'weight': 1,
-            'roads': [2, 14,*road(16 + 5 * n), 5],
+            'roads': [2, 14, *road(16 + 5 * n), 5],
             'buffer': [14],
             'road_without_collision': [2, 14, 5],
-            'collision_path': [4,10,1,6]
+            'collision_path': [4, 10, 1, 6]
         },
         {
             'id': 10,
@@ -194,7 +192,7 @@ def smart_2lane():
             'roads': [3, 15, 11, 5],
             'buffer': [15],
             'road_without_collision': [3, 15, 5],
-            'collision_path': [7,1,9,2,3,6]
+            'collision_path': [7, 1, 9, 2, 3, 6]
         },
         {
             'id': 11,
@@ -202,7 +200,7 @@ def smart_2lane():
             'roads': [3, 15, *road(16 + 6 * n), 4],
             'buffer': [15],
             'road_without_collision': [3, 15, 4],
-            'collision_path': [7,6],
+            'collision_path': [7, 6],
             'length': [l, c, 2 * b, b + c + l]
         },
         {
@@ -211,11 +209,11 @@ def smart_2lane():
             'roads': [3, 15, *road(16 + 7 * n), 6],
             'buffer': [15],
             'road_without_collision': [3, 15, 6],
-            'collision_path': [7,1,4,9]
+            'collision_path': [7, 1, 4, 9]
         }
     ]
 
-    #sim.create_signal([[0, 2], [1, 3]])
+    # sim.create_signal([[0, 2], [1, 3]])
     return sim
 
 

@@ -20,20 +20,20 @@ class Vehicle:
         self.v_max = v_max
         self.a_max = 4
         self.b_max = 5
-        self.color = (0,255,0)
+        self.color = (0, 255, 0)
         # self.position = position
         self.inroadtime = 0
         self.outroadtime = 0
-        self.co2em1=0
-        self.co2em2=0
+        self.co2em1 = 0
+        self.co2em2 = 0
         self.co2em = 0
-        self.lastp=0
+        self.lastp = 0
         self.jerk = 0
 
         self.path = []
         self.current_road_index = 0
         self.priority = 999
-        self.from_which_direction =''
+        self.from_which_direction = ''
         self.jerk_every_time = 0
 
         self.rollingRes = 0.018  # wheelonroad
@@ -56,7 +56,7 @@ class Vehicle:
         self.time_out_collision = 999999999
         self.already_out_collision = False
 
-        self.turing =0
+        self.turing = 0
 
     def init_properties(self):
         self.sqrt_ab = 2 * np.sqrt(self.a_max * self.b_max)
@@ -72,14 +72,13 @@ class Vehicle:
         elif self.path['roads'][0] == 3:
             self.from_which_direction = 'NORTH'
 
-
-        #update is_in_buffer
+        # update is_in_buffer
         if self.current_road_index == 1:
             self.is_in_buffer = True
         else:
             self.is_in_buffer = False
-        #update is_in_collision
-        if (self.current_road_index >1) & (self.current_road_index < len(self.path['roads'])-1)  :
+        # update is_in_collision
+        if (self.current_road_index > 1) & (self.current_road_index < len(self.path['roads']) - 1):
             self.is_in_collision = True
         else:
             self.is_in_collision = False
@@ -96,7 +95,7 @@ class Vehicle:
             self.x += self.v * dt + self.a * dt * dt / 2
         # Update acceleration
         alpha = 0
-        if (lead is not None) & (self.already_out_collision == False) & (self.have_traffic_signal == True) :
+        if (lead is not None) & (self.already_out_collision == False) & (self.have_traffic_signal == True):
             delta_x = lead.x - self.x - lead.l
             delta_v = self.v - lead.v
             alpha = (self.s0 + max(0, self.T * self.v + delta_v * self.v / self.sqrt_ab)) / delta_x
@@ -107,7 +106,7 @@ class Vehicle:
             self.a = -self.b_max * self.v / self.v_max
 
         if self.turing == 1:
-            self.jerk_every_time = np.sqrt(self.v*self.v*self.v*self.v/100 + self.a*self.a)
+            self.jerk_every_time = np.sqrt(self.v * self.v * self.v * self.v / 100 + self.a * self.a)
         else:
             self.jerk_every_time = abs(self.a)
 
@@ -119,9 +118,10 @@ class Vehicle:
         self.co2em1 = 0
         self.co2em2 = 0
         if self.a == 0:
-            self.co2em1 = self.rollingRes * 1250 * 0.98 * (self.x - self.lastp) /3600/ 1000 / self.fuelheat / self.oil2co2
+            self.co2em1 = self.rollingRes * 1250 * 0.98 * (
+                        self.x - self.lastp) / 3600 / 1000 / self.fuelheat / self.oil2co2
         elif self.a > 0:
-            self.co2em2 = 1250 * self.a * 0.98 * (self.x - self.lastp)/ 3600 / 1000 / self.fuelheat / self.oil2co2
+            self.co2em2 = 1250 * self.a * 0.98 * (self.x - self.lastp) / 3600 / 1000 / self.fuelheat / self.oil2co2
 
         self.co2em += self.co2em1 + self.co2em2
 
@@ -136,4 +136,3 @@ class Vehicle:
 
     def unslow(self):
         self.v_max = self._v_max
-
