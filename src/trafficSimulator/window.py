@@ -1,7 +1,7 @@
 import numpy as np
 import pygame
 from src.trafficSimulator.button import traffic_flow_button, unbalance_smart, unbalance_traffic, \
-    vehicle_velocity_button, scene_light_2lane_button, scence_smart_2lane_button
+    vehicle_velocity_button, scene_light_2lane_button, scence_smart_2lane_button, latency_button
 # from vehicle_pool import VehiclePool
 from pygame import gfxdraw
 import os
@@ -37,9 +37,9 @@ class Window:
         self.unbalance_traffic_img = pygame.image.load(unbalance_traffic_path)
 
         # create button instances
-        self.traffic_flow_button = traffic_flow_button.Button(2, 20, self.plus_img, self.minus_img, 0.01, 0.01)
+        self.traffic_flow_button = traffic_flow_button.Button(0, 20, self.plus_img, self.minus_img, 0.01, 0.01)
         self.vehicle_velocity_button = vehicle_velocity_button.Button(0, 40, self.plus_img, self.minus_img, 0.01, 0.01)
-        self.latency_button = vehicle_velocity_button.Button(2, 60, self.plus_img, self.minus_img, 0.01, 0.01)
+        self.latency_button = latency_button.Button(0, 60, self.plus_img, self.minus_img, 0.01, 0.01)
         self.light_2lane_button = scene_light_2lane_button.Button(100, 80, self.light_2lane_img, 0.7)
         self.smart_2lane_button = scence_smart_2lane_button.Button(100, 160, self.smart_2lane_img, 0.7)
         self.unbalance_smart = unbalance_smart.Button(100, 240, self.unbalance_smart_img, 0.6)
@@ -94,13 +94,11 @@ class Window:
 
             # Draw simulation
             self.draw()
-            # print(self.throughput)
             if self.sim.throughput % 100 == 0 and self.sim.throughput != 0:
                 n = len(through_set)
                 through_set.add(self.sim.throughput)
                 m = len(through_set)
                 if m > n:
-                    print(self.sim.throughput)
                     co2_set.append((self.sim.throughput, self.sim.vehicle_pool.total_co2))
 
             # Update window
@@ -360,7 +358,7 @@ class Window:
             f'Passing Rate={(round(self.sim.throughput / (self.sim.t + 0.001) * 60, 2))}Per Minute', False, (0, 0, 0))
         text_jerk = self.text_font.render(f'jerk={(self.sim.vehicle_pool.total_jerk) / (self.sim.throughput + 1)}',
                                           False, (0, 0, 0))
-        text_final_jerk = self.text_font.render(f'fianl_jerk={self.sim.vehicle_pool.final_jerk}', False, (0, 0, 0))
+        # text_final_jerk = self.text_font.render(f'fianl_jerk={self.sim.vehicle_pool.final_jerk}', False, (0, 0, 0))
 
         self.screen.blit(text_wait, (1000, 0))
         self.screen.blit(text_crash, (1000, 20))
@@ -369,7 +367,7 @@ class Window:
         self.screen.blit(text_lasttime, (1000, 80))
         self.screen.blit(text_passingeff, (1000, 100))
         self.screen.blit(text_jerk, (1000, 120))
-        self.screen.blit(text_final_jerk, (1000, 140))
+        # self.screen.blit(text_final_jerk, (1000, 140))
 
     def draw_signals(self):
         for signal in self.sim.traffic_signals:
@@ -450,7 +448,7 @@ class Window:
         # to draw buttons
         self.draw_traffic_flow_button()
         self.draw_vehicle_velocity_button()
-        self.draw_latency_button()
+        # self.draw_latency_button()
         self.draw_light_2lane_button()
         self.draw_smart_2lane_button()
         self.draw_weight_balance()

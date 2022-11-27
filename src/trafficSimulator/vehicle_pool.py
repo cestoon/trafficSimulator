@@ -23,7 +23,6 @@ class VehiclePool:
         self.final_jerk = 0
         self.v_realspeed = self.v_max * 5
         self.latency = 100
-        # self.postion = []
 
     def vehicle_generator(self):
         if self.sim.t - self.last_added_time >= 60 / self.vehicle_rate:
@@ -97,13 +96,9 @@ class VehiclePool:
                     self.vehicles_in_buffer_east.append(vehicle)
                 elif vehicle.from_which_direction == 'NORTH':
                     self.vehicles_in_buffer_north.append(vehicle)
-
                 vehicle.already_in_buffer = True
-
                 vehicle.color = (255, 255, 0)
-                vehicle.time_reach_buffer = self.sim.t + self.latency
                 vehicle.time_reach_collision = self.sim.t + 60 + self.latency
-                vehicle.time_out_collision = self.sim.t + 200 + self.latency
             # out of buffer
             elif (vehicle.already_in_buffer is True) & (vehicle.is_in_buffer is False):
                 self.vehicles_in_buffer.remove(vehicle)
@@ -148,6 +143,7 @@ class VehiclePool:
             lead = self.find_lead(vehicle)
             vehicle.update(lead, dt)
 
+            # deal with traffic light
             if self.sim.have_traffic_signal:
                 # Check for traffic signal
                 signal_state = True
@@ -167,7 +163,7 @@ class VehiclePool:
                         if (counter >= 4) & (vehicle.current_road_index == 0):
                             vehicle.slow(0.1 * vehicle._v_max)
                         elif (counter < 4) & (vehicle.current_road_index == 0):
-                            vehicle.slow(0.4 * vehicle._v_max)
+                            vehicle.slow(0.8 * vehicle._v_max)
                         else:
                             vehicle.unslow()
                             vehicle.unstop()
@@ -185,14 +181,14 @@ class VehiclePool:
                             vehicle.unstop()
                             vehicle.unslow()
                         else:
-                            vehicle.slow(0.4 * vehicle._v_max)
+                            vehicle.slow(0.8 * vehicle._v_max)
 
                     elif (vehicle.already_in_collision is True) or (vehicle.already_out_collision is True):
                         vehicle.unstop()
                         vehicle.unslow()
                     else:
                         # bug
-                        vehicle.slow(0.4 * vehicle._v_max)
+                        vehicle.slow(0.8 * vehicle._v_max)
                         # print('wrong state')
                 else:
                     if lead is None:
@@ -216,11 +212,11 @@ class VehiclePool:
                         t0 = self.vehicles_in_buffer[0].time_out_collision
                         t1 = vehicle.time_reach_collision
                         if t1 < t0:
-                            vehicle.slow(0.4 * vehicle._v_max)
+                            vehicle.slow(0.8 * vehicle._v_max)
                         else:
                             vehicle.unslow()
                     else:
-                        vehicle.slow(0.4 * vehicle._v_max)
+                        vehicle.slow(0.8 * vehicle._v_max)
                 if vehicle in self.vehicles_in_collision:
                     vehicle.unstop()
                     vehicle.unslow()
