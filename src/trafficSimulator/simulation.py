@@ -44,6 +44,7 @@ class Simulation:
         self.engineEff=0.35 #fuel2force
         self.oil2co2=0.785 #kg/L
         self.fuelheat=9.3278 #L/kWh
+        self.sixtysecond=0
 
 
     def create_road(self, start, end, road_count):
@@ -82,6 +83,10 @@ class Simulation:
             self.vehicle_pool.update(self.dt)
 
         self.t += self.dt
+        self.sixtysecond+=1
+        if self.sixtysecond==6000:
+            self.sixtysecond=0
+
         self.frame_count += 1
 
         # if 200 <= self.t <= 200 + self.dt:

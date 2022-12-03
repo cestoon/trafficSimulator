@@ -396,14 +396,20 @@ class Window:
 
 
     def draw_summary(self):
-
-        text_wait = self.text_font.render(f'Average Waiting Time={(self.sim.waittime/(self.sim.passingcars+1))}', False, (0, 0, 0))
-        text_crash = self.text_font.render(f'CO2 Emission={round(self.sim.vehicle_pool.total_co2,2)}KG', False, (0, 0, 0))
+        avgwit=(self.sim.waittime/(self.sim.passingcars+1))
+        co2em=round(self.sim.vehicle_pool.total_co2,2)
+        currenttime=self.sim.sixtysecond
+        if currenttime==50:
+            print(f'Now score is {round(1/(avgwit+1)*1000+co2em/self.sim.t*1000+200*self.sim.throughput/(self.sim.t+1),2)}')
+        text_wait = self.text_font.render(f'Average Waiting Time={avgwit}', False, (0, 0, 0))
+        text_crash = self.text_font.render(f'CO2 Emission={co2em}KG', False, (0, 0, 0))
         text_throughput = self.text_font.render(f'Throughput={self.sim.throughput}', False, (0, 0, 0))
         text_besttime = self.text_font.render(f'Best Passing Time={self.sim.besttime}', False, (0, 0, 0))
         text_lasttime = self.text_font.render(f'Last Passing Time={self.sim.currentusage}', False, (0, 0, 0))
         text_passingeff=self.text_font.render(f'Passing Rate={(round(self.sim.throughput / (self.sim.t+0.001) * 60,2))}Per Minute', False, (0, 0, 0))
         text_acceleration=self.text_font.render(f'acceleration={(self.sim.vehicle_pool.total_jerk)/(self.sim.throughput + 1)}', False, (0, 0, 0))
+
+
 
         self.screen.blit(text_wait, (1000,0 ))
         self.screen.blit(text_crash, (1000, 20))
