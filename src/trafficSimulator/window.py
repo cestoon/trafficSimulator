@@ -70,22 +70,22 @@ class Window:
         # create button instances
         self.traffic_flow_button = traffic_flow_button.Button(0, 20, self.plus_img, self.minus_img, 0.01, 0.01)
         self.vehicle_velocity_button = vehicle_velocity_button.Button(0, 40, self.plus_img, self.minus_img, 0.01, 0.01)
-        self.light_2lane_button = scene_light_2lane_button.Button(230, 200, self.light_2lane_img, 0.45)
-        self.smart_2lane_button = scence_smart_2lane_button.Button(430, 200, self.smart_2lane_img, 0.45)
-        self.unbalance_smart = unbalance_smart.Button(430, 140, self.unbalance_smart_img, 0.45)
-        self.unbalance_traffic = unbalance_traffic.Button(230, 140, self.unbalance_traffic_img, 0.45)
-        self.traffic_long_buffer = classical_long_buffer_btn.Button(170, 200, self.classical_long_buffer_img, 0.45)
-        self.traffic_short_buffer = classical_short_buffer_btn.Button(290,200, self.classical_short_buffer_img, 0.45)
-        self.smart_long_buffer = smart_long_buffer_btn.Button(370, 200, self.smart_long_buffer_img, 0.45)
-        self.smart_short_buffer = smart_short_buffer_btn.Button(490, 200, self.smart_short_buffer_img, 0.45)
-        self.unbalance_large_traffic = unbalance_large_traffic_btn.Button(170, 140, self.unbalance_large_traffic_img, 0.45)
-        self.unbalance_large_smart = unbalance_large_smart_btn.Button(370, 140, self.unbalance_large_smart_img, 0.45)
-        self.balance_smart = balance_smart_btn.Button(490, 140, self.balance_smart_btn_img,0.45)
-        self.balance_traffic = balance_traffic_btn.Button(290, 140, self.balance_traffic_btn_img, 0.45)
-        self.with_traffic_ight = balance_traffic_btn.Button(150, 70, self.with_traffic_ight_img, 0.45)
-        self.without_traffic_light = balance_traffic_btn.Button(350, 70, self.without_traffic_light_img, 0.45)
-        self.buffer_area_length = balance_traffic_btn.Button(10, 200, self.buffer_area_length_img, 0.45)
-        self.traffic_flow_distence = balance_traffic_btn.Button(10, 140, self.traffic_flow_distence_img, 0.45)
+        self.light_2lane_button = scene_light_2lane_button.Button(230, 200, self.light_2lane_img, 0.45,2,50,50)
+        self.smart_2lane_button = scence_smart_2lane_button.Button(430, 200, self.smart_2lane_img, 0.45,2,50,50)
+        self.unbalance_smart = unbalance_smart.Button(430, 140, self.unbalance_smart_img, 0.45,2,50,50)
+        self.unbalance_traffic = unbalance_traffic.Button(230, 140, self.unbalance_traffic_img, 0.45,2,50,50)
+        self.traffic_long_buffer = classical_long_buffer_btn.Button(170, 200, self.classical_long_buffer_img, 0.45,2,100,50)
+        self.traffic_short_buffer = classical_short_buffer_btn.Button(290,200, self.classical_short_buffer_img, 0.45,2,20,50)
+        self.smart_long_buffer = smart_long_buffer_btn.Button(370, 200, self.smart_long_buffer_img, 0.45,2,100,50)
+        self.smart_short_buffer = smart_short_buffer_btn.Button(490, 200, self.smart_short_buffer_img, 0.45,2,20,50)
+        self.unbalance_large_traffic = unbalance_large_traffic_btn.Button(170, 140, self.unbalance_large_traffic_img, 0.45,2,50,50)
+        self.unbalance_large_smart = unbalance_large_smart_btn.Button(370, 140, self.unbalance_large_smart_img, 0.45,2,50,50)
+        self.balance_smart = balance_smart_btn.Button(490, 140, self.balance_smart_btn_img,0.45,2,50,50)
+        self.balance_traffic = balance_traffic_btn.Button(290, 140, self.balance_traffic_btn_img, 0.45,2,50,50)
+        self.with_traffic_ight = balance_traffic_btn.Button(150, 70, self.with_traffic_ight_img, 0.45,2,50,50)
+        self.without_traffic_light = balance_traffic_btn.Button(350, 70, self.without_traffic_light_img, 0.45,2,50,50)
+        self.buffer_area_length = balance_traffic_btn.Button(10, 200, self.buffer_area_length_img, 0.45,2,50,50)
+        self.traffic_flow_distence = balance_traffic_btn.Button(10, 140, self.traffic_flow_distence_img, 0.45,2,50,50)
 
         # Simulation to draw
 
@@ -403,8 +403,7 @@ class Window:
         text_besttime = self.text_font.render(f'Best Passing Time={self.sim.besttime}', False, (0, 0, 0))
         text_lasttime = self.text_font.render(f'Last Passing Time={self.sim.currentusage}', False, (0, 0, 0))
         text_passingeff=self.text_font.render(f'Passing Rate={(round(self.sim.throughput / (self.sim.t+0.001) * 60,2))}Per Minute', False, (0, 0, 0))
-        text_jerk=self.text_font.render(f'jerk={(self.sim.vehicle_pool.total_jerk)/(self.sim.throughput + 1)}', False, (0, 0, 0))
-        text_final_jerk=self.text_font.render(f'fianl_jerk={self.sim.vehicle_pool.final_jerk}', False, (0, 0, 0))
+        text_acceleration=self.text_font.render(f'acceleration={(self.sim.vehicle_pool.total_jerk)/(self.sim.throughput + 1)}', False, (0, 0, 0))
 
         self.screen.blit(text_wait, (1000,0 ))
         self.screen.blit(text_crash, (1000, 20))
@@ -412,8 +411,7 @@ class Window:
         self.screen.blit(text_besttime, (1000, 60))
         self.screen.blit(text_lasttime, (1000, 80))
         self.screen.blit(text_passingeff, (1000, 100))
-        self.screen.blit(text_jerk, (1000, 120))
-        self.screen.blit(text_final_jerk, (1000, 140))
+        self.screen.blit(text_acceleration, (1000, 120))
 
     def draw_signals(self):
         for signal in self.sim.traffic_signals:

@@ -6,10 +6,10 @@ def smart_2lane():
     n = 15
     a = 2
     b = 10
-    c = 100
+    c = 50
     l = 50
 
-    sim = Simulation(a)
+    sim = Simulation(a,b,c)
 
     # Nodes
     WEST_RIGHT_START = (-b - l - c, a)

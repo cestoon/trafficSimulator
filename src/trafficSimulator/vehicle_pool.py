@@ -1,6 +1,6 @@
 from src.trafficSimulator import Vehicle
 from numpy.random import randint
-
+import numpy as np
 
 class VehiclePool:
     def __init__(self, sim):
@@ -165,9 +165,9 @@ class VehiclePool:
                         for buffered_vehicle in self.vehicles_in_buffer:
                             if buffered_vehicle.path['roads'][0] == vehicle.path['roads'][0]:
                                 counter = counter + 1
-                        if (counter >= 4) & (vehicle.current_road_index == 0):
+                        if (counter >= np.ceil(self.sim.c/20)) & (vehicle.current_road_index == 0):
                             vehicle.slow(0.1 * vehicle._v_max)
-                        elif (counter < 4) & (vehicle.current_road_index == 0):
+                        elif (counter < np.ceil(self.sim.c/20)) & (vehicle.current_road_index == 0):
                             vehicle.slow(0.4 * vehicle._v_max)
                         else:
                             vehicle.unslow()

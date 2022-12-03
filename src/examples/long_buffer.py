@@ -6,10 +6,10 @@ def smart_long_buffer():
     n = 15
     a = 2
     b = 10
-    c = 20
-    l = 80
+    c = 100
+    l = 50
 
-    sim = Simulation(a)
+    sim = Simulation(a,b,c)
 
     # Nodes
     WEST_RIGHT_START = (-b - l - c, a)

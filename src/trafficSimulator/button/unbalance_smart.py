@@ -3,14 +3,14 @@ from src.trafficSimulator import Simulation, TURN_LEFT, TURN_RIGHT, turn_road
 
 
 class Button():
-    def __init__(self, x, y, plus_image, plus_scale):
+    def __init__(self, x, y, plus_image, plus_scale,a,b,c):
         width = plus_image.get_width()
         height = plus_image.get_height()
         self.plus_image = pygame.transform.scale(plus_image, (int(width * plus_scale), int(height * plus_scale)))
         self.plus_rect = self.plus_image.get_rect()
         self.plus_rect.topleft = (x, y)
         self.plus_clicked = False
-        self.sim = Simulation()
+        self.sim = Simulation(a,b,c)
 
     def draw(self, surface, sim, text_font):
         action = False

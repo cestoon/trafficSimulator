@@ -10,18 +10,21 @@ import numpy as np
 
 class Simulation:
 
-    def __init__(self, a=2):
+    def __init__(self, a,b,c):
         # Set default configuration
         self.vehicle_pool = VehiclePool(self)
         self.set_default_config()
         self.paths = []
-        self.a=a
+        self.a = a
+        self.b = b
+        self.c = c
         self.have_traffic_signal = False
         self.waittime = 0
         self.throughput = 0
         self.final_waittime = 0
         self.final_jerk = 0
         self.final_co2 = 0
+
 
     def set_default_config(self):
         self.t = 0.0  # Time keeping

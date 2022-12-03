@@ -9,7 +9,7 @@ def traffic_long_buffer():
     c = 100
     l = 50
 
-    sim = Simulation(a)
+    sim = Simulation(a,b,c)
 
     # Nodes
     WEST_RIGHT_START = (-b - l - c, a)

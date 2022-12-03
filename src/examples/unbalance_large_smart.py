@@ -6,10 +6,10 @@ def smart_2lane_unbalance_large():
     n = 15
     a = 2
     b = 10
-    c = 100
+    c = 50
     l = 50
 
-    sim = Simulation(a)
+    sim = Simulation(a,b,c)
 
     # Nodes
     WEST_RIGHT_START = (-b - l - c, a)
@@ -139,7 +139,7 @@ def smart_2lane_unbalance_large():
         },
         {
             'id': 4,
-            'weight': 1,
+            'weight': 3,
             'roads': [1, 13, 9, 7],
             'buffer_index': 1,
             'road_without_collision': [1, 13, 7],
