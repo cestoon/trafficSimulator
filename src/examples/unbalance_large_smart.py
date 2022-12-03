@@ -7,7 +7,7 @@ def smart_2lane_unbalance_large():
     a = 2
     b = 10
     c = 40
-    l = 50
+    l = 90
 
     sim = Simulation(a,b,c)
 

@@ -4,15 +4,27 @@ from vehicle import Vehicle
 from src.trafficSimulator import Simulation
 from vehicle_pool import VehiclePool
 
+
+
+#smart: long: wt 14.4853 acc:3.89, co2:78.45
+        #middle: wt:7.38 acc:3.83, co2:86.36
+        #short: wt:3.35 acc:3.83, co2:91.42
+        #60:wt:10.43,acc:3.89,co2:91.31
+        #100:wt:19.2,acc:3.89,co2:97.65
 x = []
 y = []
-data = [(100, 265.7394806927325), (200, 538.2662820775407), (300, 809.9240172488057), (400, 1082.3385584663345), (500, 1353.631148928334), (600, 1626.3024325042147), (700, 1898.6223507298912), (800, 2170.4263979148714)]
+data =  [(1, 6.48), (5, 7.27), (10, 7.20)]
+
 
 for d in data:
     x.append(d[0])
     y.append(d[1])
-
-data2 = [(100, 625.914372341167), (200, 1411.922155771473), (300, 2189.209583567679), (400, 2877.091380343546), (500, 3586.023244969436), (600, 4370.843059499383), (700, 5125.991518382448), (800, 5878.891473690374)]
+#long traffic wt:49,acc:10.17, co2:63.87
+#middle       wt:30.23,acc:8.8, co2:83.11
+#short        wt:28.07, acc:3.53, co2:77.43
+#60:          wt:20.74,acc:14.3, co2:88.3
+#100:         wt:55.04,acc:8.87,co2:80.11
+data2 = [(1, 18.41), (5, 31.37), (10, 33.36)]
 x2 = []
 y2 = []
 
@@ -21,9 +33,9 @@ for d in data2:
     y2.append(d[1])
 
 # y = 2 * x + 5
-plt.title("CO2 emission graph")
-plt.xlabel("number of vehicle crossed intersect")
-plt.ylabel("CO2 (kg)")
+plt.title("ImbalanceDegree-WaitingTime")
+plt.xlabel("Imbalance")
+plt.ylabel("WaitingTime(t)")
 plt.plot(x, y, 'o-', label='smart intersect')
 plt.plot(x2, y2, 'o-', label='intersect with signal')
 plt.legend()

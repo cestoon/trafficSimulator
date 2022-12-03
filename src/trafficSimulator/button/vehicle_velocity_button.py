@@ -25,12 +25,12 @@ class Button():
             if pygame.mouse.get_pressed()[0] == 1 and self.plus_clicked == False:
                 self.plus_clicked = True
                 action = True
-                vehicle_pool.v_max += 1
+                vehicle_pool.v_max += 0.2
                 vehicle_pool.v_realspeed = round(vehicle_pool.v_max * 5)
                 # generator.v_max += 1
                 print('increase 1')
-                if vehicle_pool.v_max >= 7:
-                    vehicle_pool.v_max = 7
+                if vehicle_pool.v_max >= 7.8:
+                    vehicle_pool.v_max = 7.8
 
         if pygame.mouse.get_pressed()[0] == 0:
             self.plus_clicked = False
@@ -39,11 +39,11 @@ class Button():
             if pygame.mouse.get_pressed()[0] == 1 and self.minus_clicked == False:
                 self.minus_clicked = True
                 action = True
-                vehicle_pool.v_max -= 1
+                vehicle_pool.v_max -= 0.2
                 vehicle_pool.v_realspeed = round(vehicle_pool.v_max * 5)
                 print('decrease 1')
-                if vehicle_pool.v_max <= 2:
-                    vehicle_pool.v_max = 2
+                if vehicle_pool.v_max < 6.2:
+                    vehicle_pool.v_max = 6.2
 
         if pygame.mouse.get_pressed()[0] == 0:
             self.minus_clicked = False
@@ -53,7 +53,7 @@ class Button():
         surface.blit(self.minus_image, (self.minus_rect.x, self.minus_rect.y))
 
         # To draw text
-        text_fps = text_font.render(f'max_velocity={vehicle_pool.v_realspeed}km/h range[5˜40]', False, (0, 0, 0))
-        surface.blit(text_fps, (self.plus_rect.x - 310, self.plus_rect.y))
+        text_fps = text_font.render(f'max_velocity={vehicle_pool.v_realspeed}km/h range[30˜40]', False, (0, 0, 0))
+        surface.blit(text_fps, (self.plus_rect.x - 330, self.plus_rect.y))
 
         return action

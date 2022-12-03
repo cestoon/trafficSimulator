@@ -15,7 +15,7 @@ class VehiclePool:
         self.vehicles_in_buffer_north = []
         self.last_added_time = 0
         self.last_pass_time = 0
-        self.vehicle_rate = 30
+        self.vehicle_rate = 20
         self.vehicle_count = 0
         self.v_max = 7
         self.total_co2 = 0

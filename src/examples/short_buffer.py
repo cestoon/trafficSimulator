@@ -7,7 +7,7 @@ def smart_short_buffer():
     a = 2
     b = 10
     c = 20
-    l = 50
+    l = 110
 
     sim = Simulation(a,b,c)
 

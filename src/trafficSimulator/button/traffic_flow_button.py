@@ -27,8 +27,8 @@ class Button():
                 action = True
                 vehicle_pool.vehicle_rate += 1
                 #range
-                if vehicle_pool.vehicle_rate >= 40:
-                    vehicle_pool.vehicle_rate = 40
+                if vehicle_pool.vehicle_rate >= 35:
+                    vehicle_pool.vehicle_rate = 35
 
                 #generator.vehicle_rate += 10
                 print('increase 10')
@@ -54,7 +54,7 @@ class Button():
         surface.blit(self.minus_image, (self.minus_rect.x, self.minus_rect.y))
 
         # To draw text
-        text_fps = text_font.render(f'traffic_flow={vehicle_pool.vehicle_rate} range:[1˜40]', False, (0, 0, 0))
+        text_fps = text_font.render(f'traffic_flow={vehicle_pool.vehicle_rate} range:[1˜35]', False, (0, 0, 0))
         surface.blit(text_fps, (self.plus_rect.x - 280, self.plus_rect.y))
 
         return action
