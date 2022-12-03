@@ -6,7 +6,7 @@ def traffic_long_buffer():
     n = 15
     a = 2
     b = 10
-    c = 100
+    c = 80
     l = 50
 
     sim = Simulation(a,b,c)

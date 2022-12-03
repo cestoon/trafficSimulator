@@ -26,6 +26,10 @@ class Button():
                 self.plus_clicked = True
                 action = True
                 vehicle_pool.vehicle_rate += 1
+                #range
+                if vehicle_pool.vehicle_rate >= 40:
+                    vehicle_pool.vehicle_rate = 40
+
                 #generator.vehicle_rate += 10
                 print('increase 10')
 
@@ -39,6 +43,8 @@ class Button():
                 vehicle_pool.vehicle_rate -= 1
                 # generator.vehicle_rate -= 10
                 print('decrease 10')
+                if vehicle_pool.vehicle_rate <= 1:
+                    vehicle_pool.vehicle_rate = 1
 
         if pygame.mouse.get_pressed()[0] == 0:
             self.minus_clicked = False
@@ -48,7 +54,7 @@ class Button():
         surface.blit(self.minus_image, (self.minus_rect.x, self.minus_rect.y))
 
         # To draw text
-        text_fps = text_font.render(f'traffic_flow={vehicle_pool.vehicle_rate}', False, (0, 0, 0))
-        surface.blit(text_fps, (self.plus_rect.x - 190, self.plus_rect.y))
+        text_fps = text_font.render(f'traffic_flow={vehicle_pool.vehicle_rate} range:[1˜40]', False, (0, 0, 0))
+        surface.blit(text_fps, (self.plus_rect.x - 280, self.plus_rect.y))
 
         return action

@@ -6,7 +6,7 @@ def traffic_light_2lane_unbalance():
     n = 15
     a = 2
     b = 10
-    c = 50
+    c = 40
     l = 50
 
     sim = Simulation(a,b,c)

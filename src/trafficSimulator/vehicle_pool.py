@@ -165,19 +165,21 @@ class VehiclePool:
                         for buffered_vehicle in self.vehicles_in_buffer:
                             if buffered_vehicle.path['roads'][0] == vehicle.path['roads'][0]:
                                 counter = counter + 1
-                        if (counter >= np.ceil(self.sim.c/20)) & (vehicle.current_road_index == 0):
+                        if (counter >= np.ceil(self.sim.c/15)) & (vehicle.current_road_index == 0):
                             vehicle.slow(0.1 * vehicle._v_max)
-                        elif (counter < np.ceil(self.sim.c/20)) & (vehicle.current_road_index == 0):
+                            vehicle.stop()
+                        elif (counter < np.ceil(self.sim.c/15)) & (vehicle.current_road_index == 0):
+                            vehicle.unstop()
                             vehicle.slow(0.4 * vehicle._v_max)
                         else:
                             vehicle.unslow()
                             vehicle.unstop()
                     elif vehicle in self.vehicles_in_buffer:
                         vehicle_index = self.vehicles_in_buffer.index(vehicle)
-                        if (vehicle_index == 0 and len(self.vehicles_in_collision) <= 1 and (self.sim.t - self.last_pass_time > 10)):
+                        if (vehicle_index == 0 and len(self.vehicles_in_collision) < 1 and (self.sim.t - self.last_pass_time > 15)):
                             vehicle.unstop()
                             vehicle.unslow()
-                        elif (self.vehicles_in_buffer[0].stopped==True ) and (lead is None) and (vehicle.current_road_index>0) and (self.sim.t - self.last_pass_time > 6):
+                        elif (self.vehicles_in_buffer[0].stopped==True ) and (lead is None) and (vehicle.current_road_index>0) and (self.sim.t - self.last_pass_time > 8):
                             self.vehicles_in_collision.append(vehicle)
                             self.last_pass_time = self.sim.t
                             # self.vehicles_in_buffer.remove(vehicle)
