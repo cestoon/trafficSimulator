@@ -1,7 +1,7 @@
 from src.trafficSimulator import *
 
 
-def traffic_light_2lane_unbalance():
+def traffic_light_2lane_unbalance_large():
     # Play with these
     n = 15
     a = 2
@@ -215,7 +215,7 @@ def traffic_light_2lane_unbalance():
 
 if __name__ == '__main__':
     # Start simulation
-    win = Window(traffic_light_2lane_unbalance())
+    win = Window(traffic_light_2lane_unbalance_large())
     win.zoom = 10
     win.run(steps_per_update=10)
 

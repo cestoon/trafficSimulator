@@ -1,6 +1,6 @@
 import numpy as np
 import pygame
-from src.trafficSimulator.button import traffic_flow_button, unbalance_smart, unbalance_traffic,vehicle_velocity_button, scene_light_2lane_button,scence_smart_2lane_button
+from src.trafficSimulator.button import buffer_area_length,traffic_flow_distence,with_traffic_ight,without_traffic_light,balance_traffic_btn,balance_smart_btn,unbalance_large_traffic_btn,unbalance_large_smart_btn,smart_long_buffer_btn,classical_long_buffer_btn,smart_short_buffer_btn,classical_short_buffer_btn,traffic_flow_button, unbalance_smart, unbalance_traffic,vehicle_velocity_button, scene_light_2lane_button,scence_smart_2lane_button
 # from vehicle_pool import VehiclePool
 from pygame import gfxdraw
 import os
@@ -8,6 +8,12 @@ from src.examples.smart_2lane import smart_2lane
 from src.examples.trafficlight_2lane import traffic_light_2lane
 from src.examples.smart_unbalance import smart_2lane_unbalance
 from src.examples.traffic_unbalance import traffic_light_2lane_unbalance
+from src.examples.short_buffer_classical import traffic_short_buffer
+from src.examples.long_buffer_classical import traffic_long_buffer
+from src.examples.short_buffer import smart_short_buffer
+from src.examples.long_buffer import smart_long_buffer
+from src.examples.unbalance_large_traffic import traffic_light_2lane_unbalance_large
+from src.examples.unbalance_large_smart import smart_2lane_unbalance_large
 from matplotlib import pyplot as plt
 
 
@@ -25,10 +31,22 @@ class Window:
         exit_btn_path = os.path.join(sourceFileDir, './button/exit_btn.png')
         plus_btn_path = os.path.join(sourceFileDir, './button/plus_btn.png')
         minus_btn_path = os.path.join(sourceFileDir, './button/minus_btn.png')
-        light_2lane_btn_path = os.path.join(sourceFileDir, 'button/traffic2lanes.jpg')
-        smart_2lane_btn_path = os.path.join(sourceFileDir, 'button/smart2lanes.jpg')
-        unbalance_smart_path = os.path.join(sourceFileDir, 'button/unbalance_smart.jpg')
-        unbalance_traffic_path = os.path.join(sourceFileDir, 'button/unbalance_traffic.jpg')
+        light_2lane_btn_path = os.path.join(sourceFileDir, 'button/middle.png')
+        smart_2lane_btn_path = os.path.join(sourceFileDir, 'button/middle.png')
+        unbalance_smart_path = os.path.join(sourceFileDir, 'button/middle.png')
+        unbalance_traffic_path = os.path.join(sourceFileDir, 'button/middle.png')
+        classical_short_buffer_btn_path = os.path.join(sourceFileDir, 'button/short.png')
+        classical_long_buffer_btn_path = os.path.join(sourceFileDir, 'button/long.png')
+        smart_short_buffer_btn_path = os.path.join(sourceFileDir, 'button/short.png')
+        smart_long_buffer_btn_path = os.path.join(sourceFileDir, 'button/long.png')
+        unbalance_large_traffic_btn_path = os.path.join(sourceFileDir, 'button/large.png')
+        unbalance_large_smart_btn_path = os.path.join(sourceFileDir, 'button/large.png')
+        balance_smart_btn_path = os.path.join(sourceFileDir, 'button/none.png')
+        balance_traffic_btn_path = os.path.join(sourceFileDir, 'button/none.png')
+        with_traffic_ight_path = os.path.join(sourceFileDir, 'button/with traffic light.png')
+        without_traffic_light_path = os.path.join(sourceFileDir, 'button/without traffic light.png')
+        buffer_area_length_path = os.path.join(sourceFileDir, 'button/buffer length.png')
+        traffic_flow_distence_path = os.path.join(sourceFileDir, 'button/traffic flow.png')
 
         self.plus_img = pygame.image.load(plus_btn_path)
         self.minus_img = pygame.image.load(minus_btn_path)
@@ -36,14 +54,39 @@ class Window:
         self.smart_2lane_img = pygame.image.load(smart_2lane_btn_path)
         self.unbalance_smart_img = pygame.image.load(unbalance_smart_path)
         self.unbalance_traffic_img = pygame.image.load(unbalance_traffic_path)
+        self.classical_short_buffer_img = pygame.image.load(classical_short_buffer_btn_path)
+        self.classical_long_buffer_img = pygame.image.load(classical_long_buffer_btn_path)
+        self.smart_short_buffer_img = pygame.image.load(smart_short_buffer_btn_path)
+        self.smart_long_buffer_img = pygame.image.load(smart_long_buffer_btn_path)
+        self.unbalance_large_traffic_img = pygame.image.load(unbalance_large_traffic_btn_path)
+        self.unbalance_large_smart_img = pygame.image.load(unbalance_large_smart_btn_path)
+        self.balance_smart_btn_img = pygame.image.load(balance_smart_btn_path)
+        self.balance_traffic_btn_img = pygame.image.load(balance_traffic_btn_path)
+        self.with_traffic_ight_img = pygame.image.load(with_traffic_ight_path)
+        self.without_traffic_light_img = pygame.image.load(without_traffic_light_path)
+        self.buffer_area_length_img = pygame.image.load(buffer_area_length_path)
+        self.traffic_flow_distence_img = pygame.image.load(traffic_flow_distence_path)
 
         # create button instances
         self.traffic_flow_button = traffic_flow_button.Button(0, 20, self.plus_img, self.minus_img, 0.01, 0.01)
         self.vehicle_velocity_button = vehicle_velocity_button.Button(0, 40, self.plus_img, self.minus_img, 0.01, 0.01)
-        self.light_2lane_button = scene_light_2lane_button.Button(100, 60, self.light_2lane_img, 0.7)
-        self.smart_2lane_button = scence_smart_2lane_button.Button(100, 140, self.smart_2lane_img, 0.7)
-        self.unbalance_smart = unbalance_smart.Button(100, 220, self.unbalance_smart_img, 0.6)
-        self.unbalance_traffic = unbalance_traffic.Button(100, 300, self.unbalance_traffic_img, 0.6)
+        self.light_2lane_button = scene_light_2lane_button.Button(230, 200, self.light_2lane_img, 0.45)
+        self.smart_2lane_button = scence_smart_2lane_button.Button(430, 200, self.smart_2lane_img, 0.45)
+        self.unbalance_smart = unbalance_smart.Button(430, 140, self.unbalance_smart_img, 0.45)
+        self.unbalance_traffic = unbalance_traffic.Button(230, 140, self.unbalance_traffic_img, 0.45)
+        self.traffic_long_buffer = classical_long_buffer_btn.Button(170, 200, self.classical_long_buffer_img, 0.45)
+        self.traffic_short_buffer = classical_short_buffer_btn.Button(290,200, self.classical_short_buffer_img, 0.45)
+        self.smart_long_buffer = smart_long_buffer_btn.Button(370, 200, self.smart_long_buffer_img, 0.45)
+        self.smart_short_buffer = smart_short_buffer_btn.Button(490, 200, self.smart_short_buffer_img, 0.45)
+        self.unbalance_large_traffic = unbalance_large_traffic_btn.Button(170, 140, self.unbalance_large_traffic_img, 0.45)
+        self.unbalance_large_smart = unbalance_large_smart_btn.Button(370, 140, self.unbalance_large_smart_img, 0.45)
+        self.balance_smart = balance_smart_btn.Button(490, 140, self.balance_smart_btn_img,0.45)
+        self.balance_traffic = balance_traffic_btn.Button(290, 140, self.balance_traffic_btn_img, 0.45)
+        self.with_traffic_ight = balance_traffic_btn.Button(150, 70, self.with_traffic_ight_img, 0.45)
+        self.without_traffic_light = balance_traffic_btn.Button(350, 70, self.without_traffic_light_img, 0.45)
+        self.buffer_area_length = balance_traffic_btn.Button(10, 200, self.buffer_area_length_img, 0.45)
+        self.traffic_flow_distence = balance_traffic_btn.Button(10, 140, self.traffic_flow_distence_img, 0.45)
+
         # Simulation to draw
 
         self.sim = sim
@@ -395,15 +438,15 @@ class Window:
         self.screen.blit(text_fps, (0, 0))
         self.screen.blit(text_frc, (100, 0))
 
-    def draw_weight_balance(self):
+    def draw_smart_unbalance(self):
         if self.unbalance_smart.draw(self.screen, self.sim, self.text_font):
             self.sim = smart_2lane_unbalance()
-            #print('unbalance1')
+            print('smart_unbalance')
 
-    def draw_weight_unbalance(self):
+    def draw_traffic_unbalance(self):
         if self.unbalance_traffic.draw(self.screen, self.sim, self.text_font):
             self.sim = traffic_light_2lane_unbalance()
-            #print('unbalance')
+            print('traffic_unbalance')
 
     def draw_traffic_flow_button(self):
         # to draw buttons
@@ -423,7 +466,42 @@ class Window:
     def draw_smart_2lane_button(self):
         if self.smart_2lane_button.draw(self.screen, self.sim, self.text_font):
             self.sim = smart_2lane()
-
+    def draw_with_traffic_ight(self):
+        if self.with_traffic_ight.draw(self.screen, self.sim, self.text_font):
+            print('')
+    def draw_without_traffic_light(self):
+        if self.without_traffic_light.draw(self.screen, self.sim, self.text_font):
+            print('')
+    def draw_buffer_area_length(self):
+        if self.buffer_area_length.draw(self.screen, self.sim, self.text_font):
+            print('')
+    def draw_traffic_flow_distence(self):
+        if self.traffic_flow_distence.draw(self.screen, self.sim, self.text_font):
+            print('')
+    def draw_balance_light_2lane_button(self):
+        if self.balance_traffic.draw(self.screen, self.sim, self.text_font):
+            self.sim = traffic_light_2lane()
+    def draw_balance_smart_2lane_button(self):
+        if self.balance_smart.draw(self.screen, self.sim, self.text_font):
+            self.sim = smart_2lane()
+    def draw_smart_short_buffer(self):
+        if self.smart_short_buffer.draw(self.screen, self.sim, self.text_font):
+            self.sim = smart_short_buffer()
+    def draw_smart_long_buffer(self):
+        if self.smart_long_buffer.draw(self.screen, self.sim, self.text_font):
+            self.sim = smart_long_buffer()
+    def draw_traffic_short_buffer(self):
+        if self.traffic_short_buffer.draw(self.screen, self.sim, self.text_font):
+            self.sim = traffic_short_buffer()
+    def draw_traffic_long_buffer(self):
+        if self.traffic_long_buffer.draw(self.screen, self.sim, self.text_font):
+            self.sim = traffic_long_buffer()
+    def draw_unbalance_large_traffic(self):
+        if self.unbalance_large_traffic.draw(self.screen, self.sim, self.text_font):
+            self.sim = traffic_light_2lane_unbalance_large()
+    def draw_unbalance_large_smart(self):
+        if self.unbalance_large_smart.draw(self.screen, self.sim, self.text_font):
+            self.sim = smart_2lane_unbalance_large()
     def draw_graph(self):
         x = np.arange(1, 11)
         y = 2 * x + 5
@@ -449,7 +527,19 @@ class Window:
         self.draw_vehicle_velocity_button()
         self.draw_light_2lane_button()
         self.draw_smart_2lane_button()
-        self.draw_weight_balance()
-        self.draw_weight_unbalance()
+        self.draw_smart_unbalance()
+        self.draw_traffic_unbalance()
         self.draw_summary()
+        self.draw_smart_short_buffer()
+        self.draw_traffic_short_buffer()
+        self.draw_smart_long_buffer()
+        self.draw_traffic_long_buffer()
+        self.draw_unbalance_large_traffic()
+        self.draw_unbalance_large_smart()
+        self.draw_balance_light_2lane_button()
+        self.draw_balance_smart_2lane_button()
+        self.draw_with_traffic_ight()
+        self.draw_without_traffic_light()
+        self.draw_traffic_flow_distence()
+        self.draw_buffer_area_length()
         # self.draw_graph()

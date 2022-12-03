@@ -221,6 +221,6 @@ def smart_2lane_unbalance():
 
 if __name__ == '__main__':
     # Start simulation
-    win = Window(smart_2lane())
+    win = Window(smart_2lane_unbalance())
     win.zoom = 10
     win.run(steps_per_update=10)

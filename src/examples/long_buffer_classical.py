@@ -1,7 +1,7 @@
 from src.trafficSimulator import *
 
 
-def traffic_light_2lane_unbalance():
+def traffic_long_buffer():
     # Play with these
     n = 15
     a = 2
@@ -115,13 +115,13 @@ def traffic_light_2lane_unbalance():
     sim.paths = [
         {
             'id': 1,
-            'weight': 10,
+            'weight': 3,
             'roads': [0, 12, 8, 6],
             'collision_path': [4, 10, 12, 5, 6, 9]
         },
         {
             'id': 2,
-            'weight': 10,
+            'weight': 1,
             'roads': [0, 12, *road(16), 5],
             'buffer_index': 1,
             'road_without_collision': [0, 1],
@@ -129,7 +129,7 @@ def traffic_light_2lane_unbalance():
         },
         {
             'id': 3,
-            'weight': 10,
+            'weight': 1,
             'roads': [0, 12, *road(16 + n), 7],
             'collision_path': [4, 8, 6, 7]
         },
@@ -159,7 +159,7 @@ def traffic_light_2lane_unbalance():
         },
         {
             'id': 7,
-            'weight': 10,
+            'weight': 3,
             'roads': [2, 14, 10, 4],
             'buffer': [14],
             'road_without_collision': [2, 14, 4],
@@ -168,7 +168,7 @@ def traffic_light_2lane_unbalance():
         },
         {
             'id': 8,
-            'weight': 10,
+            'weight': 1,
             'roads': [2, 14, *road(16 + 4 * n), 7],
             'buffer': [14],
             'road_without_collision': [2, 14, 7],
@@ -176,7 +176,7 @@ def traffic_light_2lane_unbalance():
         },
         {
             'id': 9,
-            'weight': 10,
+            'weight': 1,
             'roads': [2, 14, *road(16 + 5 * n), 5],
             'buffer': [14],
             'road_without_collision': [2, 14, 5],
@@ -215,7 +215,7 @@ def traffic_light_2lane_unbalance():
 
 if __name__ == '__main__':
     # Start simulation
-    win = Window(traffic_light_2lane_unbalance())
+    win = Window(traffic_long_buffer())
     win.zoom = 10
     win.run(steps_per_update=10)
 
