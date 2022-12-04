@@ -396,11 +396,25 @@ class Window:
 
 
     def draw_summary(self):
-        avgwit=(self.sim.waittime/(self.sim.passingcars+1))
-        co2em=round(self.sim.vehicle_pool.total_co2,2)
-        currenttime=self.sim.sixtysecond
-        if currenttime==50:
-            print(f'Now score is {round(1/(avgwit+1)*1000+co2em/self.sim.t*1000+200*self.sim.throughput/(self.sim.t+1),2)}')
+        avgwit = (self.sim.waittime / (self.sim.passingcars + 1))
+        co2em = round(self.sim.vehicle_pool.total_co2, 2)
+        currenttime = self.sim.sixtysecond
+
+        if currenttime == 50:
+            newscore = round(1 / (avgwit + 1) * 1000 + 1 / (co2em / self.sim.t + 1) * 1000 + 20 * (self.sim.throughput - self.sim.throughput_fixed) - 20 * (self.sim.vehicle_pool.total_jerk) / (self.sim.throughput + 1), 2)
+            self.sim.throughput_fixed = self.sim.throughput
+            if newscore == 2000:
+                return
+            self.sim.averagescore.append(newscore)
+            #print(newscore)
+            #print(self.sim.averagescore)
+            # print(self.sim.t)
+            if len(self.sim.averagescore) == 4:
+                averagescorethistime = sum(self.sim.averagescore) / len(self.sim.averagescore)
+                print(f'Benchmark score is {averagescorethistime}')
+                print(f'The Robustness Score is:{((self.sim.averagescore[0] - averagescorethistime) * (self.sim.averagescore[0] - averagescorethistime) + (self.sim.averagescore[1] - averagescorethistime) * (self.sim.averagescore[1] - averagescorethistime) + (self.sim.averagescore[2] - averagescorethistime) * (self.sim.averagescore[2] - averagescorethistime) + (self.sim.averagescore[3] - averagescorethistime) * (self.sim.averagescore[3] - averagescorethistime)) / 4}')
+                self.sim.averagescore.clear()
+
         text_wait = self.text_font.render(f'Average Waiting Time={avgwit}', False, (0, 0, 0))
         text_crash = self.text_font.render(f'CO2 Emission={co2em}KG', False, (0, 0, 0))
         text_throughput = self.text_font.render(f'Throughput={self.sim.throughput}', False, (0, 0, 0))

@@ -45,6 +45,8 @@ class Simulation:
         self.oil2co2=0.785 #kg/L
         self.fuelheat=9.3278 #L/kWh
         self.sixtysecond=0
+        self.averagescore = []
+        self.throughput_fixed = 0
 
 
     def create_road(self, start, end, road_count):
