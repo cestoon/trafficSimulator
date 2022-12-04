@@ -1,40 +1,13 @@
-# Traffic Simulator
+# Smart Traffic Simulator for Urban Intersections
 
-## Important!
+## how to use the simulator
 
-Due to the unexpected large interest in the project, I'm currently working on redesigning the project from scratch to be more efficient and customizable.
+The simulator uses Python3.9 as the environment. At first, the users need to download the Pygame, NumPy, and Scipy packages. After that, users need to compile the code which is named "smart\_2lanes" in the "examples" folder. In this way, users can enter the simulator.
 
-If you have any suggestions or ideas, don't hesitate to send me a message. If you are interested in seeing the project evolve further, any support is appreciated.
+In the user interface, there are two lines of buttons.
 
-## About The Project
+The first line (the red park in Fig \ref{example}) is the different weights of traffic flow. Users can use these buttons to test the influence of the different weights of traffic flow. The second line (the blue park in Fig \ref{example}) means the different lengths of the buffer area. Users can use these buttons to test the influence of the length of the buffer area.
 
-A traffic simulator implemented in Python using pygame.
+At the same time, there are two different vertical areas. The first part(the orange park in Fig \ref{example}) is the test for the intersection with a traffic light, and the second part (the green park in Fig \ref{example}) is the intersection without a traffic light. Users can use these buttons to test the two different scenes.
 
-To learn more about how the project was created check out this [article](https://towardsdatascience.com/simulating-traffic-flow-in-python-ee1eab4dd20f).
-on Medium.
-
-[translated version](http://www.bimant.com/blog/traffic-simulation-in-python/)
-
-## Getting Started
-
-### Prerequisites
-
-This project requires `numpy`, `pygame`, and `scipy`, and works with Python 3.
-
-### Using trafficSimulator
-
-Simply put the `trafficSimulator` folder in the same path as your file, Then use `from trafficSimulator import *`.
-
-## Documentation
-
-The documentation process for this project has not started yet.
-
-If you want to contribute, check how to contribute below.
-
-## Contributing
-
-Your contributions are always welcome! Please have a look at the [contribution guidelines](https://github.com/BilHim/trafficSimulator/blob/main/CONTRIBUTING.md) first.
-
-## Licensing
-
-Check the project license [here](https://github.com/BilHim/trafficSimulator/blob/main/LICENSE.md).
+The section in the corner is the controller of the traffic flow and velocity. Users can control the two different parameters.
