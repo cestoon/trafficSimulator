@@ -11,3 +11,5 @@ The first line is the different weights of traffic flow. Users can use these but
 At the same time, there are two different vertical areas. The first part is the test for the intersection with a traffic light, and the second part  is the intersection without a traffic light. Users can use these buttons to test the two different scenes.
 
 The section in the corner is the controller of the traffic flow and velocity. Users can control the two different parameters.
+
+![image]([https://github.com/lexsaints/powershell/blob/master/IMG/ps2.png](https://github.com/cestoon/trafficSimulator/blob/new-new-windows/example.png))
